@@ -18,7 +18,7 @@ See also [the page from last year](https://github.com/satlecture/kit2025).
 
 (to be extended)
 
-* **Monday, April 20**: L1 - Organisation, Introduction, Applications, Encodings, IPASIR _[AI+DS]_
+* **Monday, April 20**: [L1 - Organisation, Introduction, Applications, Encodings, IPASIR](slides/l01-introduction.pdf) _[AI+DS]_
 
 ## Exercises
 
