@@ -206,13 +206,14 @@ A decision problem is NP-complete if it is in NP and every problem in NP can be 
 \pause
 \begin{block}{Consequences of NP-completeness of SAT}
 \begin{itemize}\itemsep1ex
-	\item We do not have a polynomial algorithm for SAT (yet) ~\cChangey{0}
-	\item If $P \neq NP$ then we will never have a polynomial algorithm for SAT ~\cChangey{-1}
-	\item All the known algorithms for SAT have exponential runtime in the \textbf{worst case} ~\cChangey{-2}
+	\item<2-> We do not have a polynomial algorithm for SAT (yet) ~\cChangey{0}
+	\item<3-> If $P \neq NP$ then we will never have a polynomial algorithm for SAT ~\cChangey{-1}
+	\item<4-> All the known algorithms for SAT have exponential runtime in the \textbf{worst case} ~\cChangey{-2}
 \end{itemize}
 \end{block}~\\
-\pause
+\only<5>{
 \highlow{Try it yourself:} \url{http://www.cs.utexas.edu/~marijn/game/}
+}
 \end{frame}
 
 \begin{frame}{History of Propositional Satisfiability}
