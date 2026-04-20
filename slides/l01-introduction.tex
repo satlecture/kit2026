@@ -358,7 +358,7 @@ Every sequence $x_1, \dots, x_n$ of numbers $0 \leq x_i < r$ has at least $k$ eq
 \begin{itemize}
 	\item We have seen that $W(2,3) = 9$.
 	\item $W(2,6) = 1132$ was shown in \href{http://dx.doi.org/10.1080/10586458.2008.10129025}{[2008 by Kouril and Paul]} (using a SAT solver!)
-	\item but $W(2,7)$ is yet unknown.
+	\item but $W(2,7)$ is yet unknown ($> 3\,703$).
 	\item $2^{2^{r^{2^{2^{k+9}}}}}$ is an upper bound for $W(r,k)$ (shown in \href{http://dx.doi.org/10.1007/s00039-001-0332-9}{[2001 by Gowers]}).
 \end{itemize}
 \end{example}
@@ -366,12 +366,14 @@ Every sequence $x_1, \dots, x_n$ of numbers $0 \leq x_i < r$ has at least $k$ eq
 
 \begin{frame}{Graph Coloring}
 \begin{example}[McGregor Graph, 110 nodes, planar]
-	\textbf{Claim:} Cannot be colored with less than 5 colors. \unimp{(Scientific American, 1975, M.~Gardner's ``Mathematical Games'')}
+	\textbf{Claim:} Needs $\geq$ 5 colors to color. \unimp{(Sc.\ American, \textbf{April} 1975, M.~Gardner's ``Mathematical Games'')}
 	\begin{center}
-		\includegraphics<1>[height=7.5cm]{figures/l01/macgregor-bw.jpg}
+		\includegraphics<1>[height=8.5cm]{figures/l01/macgregor-bw.jpg}
 		%\includegraphics<2>[height=4.5cm]{figures/l01/macgregor_arb.jpg}
-		\includegraphics<2>[height=7.5cm]{figures/l01/macgregor\_arb-colorblind-friendly.jpg}
+		\includegraphics<2>[height=8.5cm]{figures/l01/macgregor\_arb-colorblind-friendly.jpg}
 	\end{center}
+	\vspace*{1mm}
+	\unimp{See: \url{https://www.cs.cmu.edu/~bryant/boolean/macgregor.html}}
 \end{example}
 \end{frame}
 
@@ -465,13 +467,16 @@ SAT solvers are command line applications that take as argument a text file with
 There are many applications that require us to solve a sequence of similar SAT instances:\\[1ex] 
 Software verification, planning, scheduling, MaxSAT, \dots\\[1em]
 \begin{block}{Incremental SAT Solving}
-\begin{itemize}\setlength{\itemsep}{1em}
+\begin{itemize}\setlength{\itemsep}{0.5em}
 	\item The SAT solver is initialized once with a formula
 	\item Assumptions can be added before each call to \texttt{solve()}\\[1ex]
 	$\rightarrow$ assumptions are literals that serve as a partial assignment to their variables
 	\item Between \texttt{solve()} calls, new clauses can be added
+	\pause
 	\item Advantage 1: (De-)Initialization overheads removed
 	\item Advantage 2: Keep preprocessed formula, learned clauses, dynamic heuristic parameters, \ldots
+	\pause
+	\item \highlo{Disadvantages}: \pause More complex solver logic, prevents some preprocessing / simplifications
 \end{itemize}
 \end{block}
 \end{frame}
@@ -480,7 +485,7 @@ Software verification, planning, scheduling, MaxSAT, \dots\\[1em]
 \vspace{-1em}
 IPASIR = \textbf{R}e-entrant \textbf{I}ncremental \textbf{S}atisfiability \textbf{API} (acronym reversed)\\[1ex]
 \begin{block}{IPASIR}
-	\begin{itemize}\setlength{\itemsep}{1em}
+	\begin{itemize}\setlength{\itemsep}{0.5em}
 		\item Defined for \href{https://doi.org/10.1016/j.artint.2016.08.007}{SAT Race 2015} to unify incremental SAT solver interfaces
 		\item IPASIR has become a standard interface of incremental SAT solving
 		\item Extension by User Propagators (UP): \href{https://doi.org/10.4230/LIPIcs.SAT.2023.8}{IPASIR UP}
@@ -517,8 +522,9 @@ IPASIR = \textbf{R}e-entrant \textbf{I}ncremental \textbf{S}atisfiability \textb
 \includegraphics[height=.7\textheight]{figures/l01/ipasir.pdf}
 \end{frame}
 
-\begin{frame}{Code Demo: Essential Variables}
-Given a CNF formula $F$ over variables $V := \vars{F}$, satifying assignments to $F$ can be partial, i.e., some variables in $V$ are not assigned but still the formula is satisfied.\\[1ex]
+\begin{frame}{Essential Variables}
+Given a CNF formula $F$ over variables $V := \vars{F}$, satifying assignments to $F$ can be partial, i.e.,\\
+some variables in $V$ are not assigned but still the formula is satisfied.\\[1ex]
 A variable $x$ is \emph{essential} if and only $x$ it has to be assigned (True or False) in each satisfying assignment.\\[1em]
 
 \begin{example}[Enumerating Essential Variables]
@@ -532,8 +538,8 @@ A variable $x$ is \emph{essential} if and only $x$ it has to be assigned (True o
 	\item For each variable $x$, solve the formula with the assumptions $\overline{x_P}$ and $\overline{x_N}$.\\[1ex]
 	If the formula is UNSAT under these assumptions then $x$ is essential.
 \end{itemize}
-\end{example}~\\
-\highlow{Let's implement it!}\\[1em]
+\end{example}%
+%~\\\highlow{Let's implement it!}\\[1em]
 \end{frame}
 
 \end{document}
