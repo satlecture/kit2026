@@ -21,7 +21,7 @@
 \title{Practical SAT Solving}
 \subtitle{Lecture 2 \unimp{\normalfont --  Tractable Subclasses, Encodings}}
 \author{\underline{Ashlin Iser}, Dominik Schreiber}
-\date{April 29, 2025}
+\date{April 27, 2026}
 
 % define commands
 \input{l00-commands.tex}
@@ -80,10 +80,10 @@ Each clause has exactly two literals.\\[1ex]
 	\begin{itemize}\setlength{\itemsep}{1em}
 		\item \highl{Construct} Implication Graph:\\[1ex]
 			Directed graph with a vertex for each literal and two edges \highlo{$\lnot l_1 \rightarrow l_2$} and \highlo{$\lnot l_2 \rightarrow l_1$} for each clause $\{ l_1, l_2 \}$
-		\item \highl{Find} Strongly Connected Components (SCC): 
-			In an SCC, there is a path from every vertex to every other vertex.
-		\item \highl{Check} for existence of complementary literals in the same SCC\\
-		Tarjan's algorithm finds SCCs in $\mathcal{O}(|V|+|E|)$
+		\item<3-> \highl{Find} Strongly Connected Components (SCC): 
+			In an SCC, there is a path from every vertex to every other vertex.\\[1ex]
+		$\rightarrow$ Tarjan's algorithm finds SCCs in $\mathcal{O}(|V|+|E|)$
+		\item<4-> \highl{Check} for existence of complementary literals in the same SCC
 	\end{itemize}
 \end{block}~\\
 \pause
