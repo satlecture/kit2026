@@ -23,7 +23,7 @@
 % define title etc.pp.
 \title{Practical SAT Solving}
 \subtitle{Lecture 3 \unimp{\normalfont --  Elementary SAT Solving Algorithms}}
-\author{\underline{Ashlin Iser}, Dominik Schreiber}
+\author{{Ashlin Iser}, \underline{Dominik Schreiber}}
 \date{May 5, 2025}
 
 % define commands
@@ -275,22 +275,23 @@
 		Given a CNF formula $F$ with two resolvable clauses $C_1, C_2 \subseteq F$ with resolvent $\operatorname{R}(C_1,C_2)$, the following holds:
 		\vspace*{-1ex}
 		\begin{align*}
-			\highlo{F \quad \equiv~} \quad F \land \operatorname{R}(C_1,C_2)
+			{F \quad \equiv~} \quad F \land \operatorname{R}(C_1,C_2)
 		\end{align*}
 	\end{block}
 	
 	\pause
 	\begin{block}{Proof}
+		\pause
 		Let $C_1 := \{ x \} \cup P_1$ and $C_2 := \{ \lnot x \} \cup P_2$ such that $\operatorname{R}(C_1,C_2) = P_1 \cup P_2 =: D$.\\[1ex]
 		
-		\textbf{Soundness:} $F \vdash F \land D \implies \highlo{F \models~} F \land D$ \\[.5ex]
+		\textbf{Soundness:} $F \vdash F \land D \implies \highlo{F \models~} F \land D$ \\[.5ex] \pause
 		\pause
 		Any satisfying assignment $\phi$ of $F$ satisfies both $C_1$ and $C_2$.
 		If $\phi$ satisfies $x$, then it satisfies some literal in $P_2$.\\
 		Otherwise, $\phi$ satisfies $\lnot x$ and thus satisfies some literal in $P_1$.
 		As such, $\phi$ also satisfies $D$.\\[1ex]
 		\pause
-		\textbf{Equivalence:} $F \vdash F \land D \implies F \land D \highlo{~\models F}$ \\[.5ex]
+		\textbf{Equivalence:} $F \vdash F \land D \implies F \land D \highlo{~\models F}$ \\[.5ex] \pause
 		\pause
 		Since $D$ does not introduce new variables, $F \wedge D$ can not have more satisfying assignments than $F$.
 	\end{block}
@@ -304,6 +305,7 @@
 			\item \highlo{Not all possible} consequences of $F$ can be derived by resolution. (``only'' refutation-complete)
 		\end{itemize}
 	\end{block}
+	\pause
 	
 	\begin{block}{Resolution Proof}
 		A \highlo{resolution proof} for $F$ is a sequence of clauses $\langle C_1, C_2, \ldots, C_{k-1}, C_k = \emptyset \rangle$\\
@@ -587,20 +589,26 @@
 				\begin{algorithm}[H]
 					\DontPrintSemicolon
 					\caption{DPLL(ClauseSet $S$)}
+					\vspace*{2mm}
 					\While { $S$ contains a unit clause $\{ L \}$ } {
 						delete from $S$ all clauses containing $L$ \tcp*{unit-subsumption}
 						delete $\lnot L$ from all clauses in $S$ \tcp*{unit-resolution}
 					}
+					\vspace*{1mm}
 					\lIf { \highlo{$\emptyset \in S$} } { 
 						\Return \highlo{false} \tcp*[f]{empty clause} 
 					}
+					\vspace*{1mm}
 					\While { $S$ contains a pure literal $L$ } {
 						delete from $S$ all clauses containing $L$ \tcp*{pure literal elimination}
 					}
+					\vspace*{1mm}
 					\lIf { \highl{$S = \emptyset$} } { 
 						\Return \highl{true} \tcp*[f]{no clauses} 
 					}
+					\vspace*{1mm}
 					choose a literal $L$ occurring in $S$ \tcp*{case-splitting}
+					\vspace*{1mm}
 					\lIf { DPLL($S \cup \{ \{ L \} \}$) } { 
 						\Return true \tcp*[f]{first branch} 
 					}

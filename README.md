@@ -20,6 +20,7 @@ See also [the page from last year](https://github.com/satlecture/kit2025).
 
 * **Monday, April 20**: [L1 - Organisation, Introduction, Applications, Encodings, IPASIR](slides/l01-introduction.pdf) _[AI+DS]_
 * **Monday, April 27**: [L2 - Tractable Subclasses, Encodings](slides/l02-encodings.pdf) _[AI]_
+* **Monday, May 4**: [L3 - Elementary SAT Solving Algorithms (SLS, Resolution, Saturation, DP, DPLL)](slides/l03-sls-dpll.pdf) _[DS]_
 
 ## Exercises
 
