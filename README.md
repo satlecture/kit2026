@@ -30,4 +30,4 @@ This is our tentative plan for exercises.
 
 ## Code
 
-* **Tuesday, May 5**: [E0 - Pigeon Hole Principle, Cardinality Contraint Encodings, Incremental SAT Solving](code/) _[AI]_
+* **Tuesday, May 5**: [E0 - Pigeon Hole Principle, Cardinality Contraint Encodings, Incremental SAT Solving](code/phole.cc) _[AI]_
