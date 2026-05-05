@@ -2,11 +2,9 @@
 
 _Summer Term 2026 • [GitHub repository](https://github.com/satlecture/kit2026) • [Web page](https://satlecture.github.io/kit2026/) • Karlsruhe Institute of Technology (KIT)_
 
+This lecture with exercises is offered by [Ashlin Iser (ITI Sanders)](https://ae.iti.kit.edu/english/3986.php) and [Dominik Schreiber (KASTEL-VADS SAtRes)](https://satres.kit.edu/schreiber), with [Niccolò Rigi-Luperti (SAtRes)](https://satres.kit.edu/team/) serving as co-manager of exercises.
 
-This lecture with exercises is offered by [Ashlin Iser (ITI Sanders)](https://ae.iti.kit.edu/english/3986.php) and [Dominik Schreiber (KASTEL-VADS SAtRes)](https://satres.kikit.kit.edu/schreiber).
-[Niccolò Rigi-Luperti (SAtRes)](https://satres.kikit.kit.edu/team/) acts as a co-manager of exercises.  
-The lecture provides a friendly and practical overview of the subject of propositional satisfiability (SAT) solving, including its theoretical background, important algorithms and techniques, parallelization, proofs, applications, and related tools (MaxSAT, SMT).  
-No particular prior knowledge beyond basic foundations of computer science is required.
+The lecture provides a friendly and practical overview of propositional satisfiability (SAT) solving, covering its theoretical background, important algorithms and techniques, parallelization, proofs, applications, and related tools (MaxSAT, SMT). No particular prior knowledge beyond basic foundations of computer science is required.
 
 All lectures and exercises take place at **15:45 in building 50.34 room 301**.
 Our first appointment is the lecture on **Monday, April 20**.
@@ -28,7 +26,7 @@ This is our tentative plan for exercises.
 
 (to be extended)
 
-* **Tuesday, May 5**: E0 - getting started, announcement of assignment 1 (A1) (introduction, algorithms, encodings) _[AI]_
+* **Tuesday, May 5**: [E0 - Getting Started, Release of Exercise Sheet 1 (Introduction, Encodings)](exercises/ex1.pdf) _[AI]_
 
 ## Code
 
