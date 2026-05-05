@@ -16,22 +16,23 @@
 \input{../slides/l00-commands.tex}
 
 \begin{document}
-\exhead{1}{2025-05-06}{2024-05-20}
+\exhead{1}{2026-05-05}{2026-05-19}
 
-\section{Competition: Graph Coloring (5(+7) Points)}
+\section{Competition: Graph Coloring (7(+7) Points)}
 
 Implement a SAT-based graph vertex coloring solver.
 Your application should take as a single command line argument a DIMACS file with a graph.
 It needs to find the smallest number of colors needed to color the graph such that no adjacent vertices share the same color.
 The application should output the number of colors required.
-The fastest solver gets \highl{seven bonus points}.
+Together with your code (and build instructions), submit a single (PDF) slide to present your solution in a two-minute lightning talk.
+The overall most convincing submission(s) get(s) up to \highl{seven bonus points}.
 
 \vspace*{3mm}
 \noindent
-\textbf{Code skeleton:} \url{https://github.com/satlecture/kit2025/blob/main/code/src/graphcol.cc}
+\textbf{Code skeleton:} \url{https://github.com/satlecture/kit2026/blob/main/code/src/graphcol.cc}
 
 \noindent
-\textbf{Benchmark instances:} \url{https://github.com/satlecture/kit2024/tree/main/exercises/coloring}
+\textbf{Benchmark instances:} \url{https://github.com/satlecture/kit2026/tree/main/exercises/coloring}
 
 \section{Pythagorean Triples (3+3 Points)}
 
@@ -68,5 +69,7 @@ Construct a resolution refutation (i.e., proof of unsatisfiability) for the foll
 	\{\overline x_{3}, \overline x_{4}, x_{5}\}
 	\bigr\}
 \end{align*}
+%
+We suggest to use this shorthand notation:~~$3\,4\,\overline{1}\,5$,~~$\overline{3}\,4\,5$,~~etc.
 
 \end{document}
