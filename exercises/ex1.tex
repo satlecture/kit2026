@@ -7,10 +7,12 @@
 \usepackage{hyperref}
 \usepackage{amsmath}
 
-\usepackage[margin=2cm]{geometry}
+\usepackage[margin=3.2cm]{geometry}
 
 \usepackage{titlesec}
 \titleformat*{\section}{\large\bfseries}
+\renewcommand{\thesubsection}{\alph{subsection})}
+\usepackage{enumitem}
 
 \definecolor{kit-blue}{RGB}{70, 100, 170}
 \input{../slides/l00-commands.tex}
@@ -18,28 +20,6 @@
 \begin{document}
 \exhead{1}{2026-05-05}{2026-05-19}
 
-\section{Competition: Graph Coloring (7(+7) Points)}
-
-Implement a SAT-based graph vertex coloring solver.
-Your application should take as a single command line argument a DIMACS file with a graph.
-It needs to find the smallest number of colors needed to color the graph such that no adjacent vertices share the same color.
-The application should output the number of colors required.
-Together with your code (and build instructions), submit a single (PDF) slide to present your solution in a two-minute lightning talk.
-The overall most convincing submission(s) get(s) up to \highl{seven bonus points}.
-
-\vspace*{3mm}
-\noindent
-\textbf{Code skeleton:} \url{https://github.com/satlecture/kit2026/blob/main/code/src/graphcol.cc}
-
-\noindent
-\textbf{Benchmark instances:} \url{https://github.com/satlecture/kit2026/tree/main/exercises/coloring}
-
-\section{Pythagorean Triples (3+3 Points)}
-
-(a) Find a coloring for the numbers $1 \leq i \leq 1000$ such that no Pythagorean triple is monochromatic.
-
-\noindent
-(b) Estimate the number of variables and clauses in the Pythagorean triples encoding from the lecture (as a function of $n$).
 
 \section{Recognizing Hidden Horn (6 Points)}
 
@@ -47,12 +27,17 @@ Let $F$ be an arbitrary CNF formula.
 Let $R_F$ be a 2-SAT formula that contains the clause $\{l_1, l_2\}$ iff there is a clause $C \in F$ such that $\{l_1,l_2\} \subseteq C$.
 Prove that if $R_F$ is satisfiable, then $F$ is a Hidden Horn formula.
 
-\section{Tseitin Encoding (3+3 Points)}
+\section{Tseitin Encoding (6 Points)}
 
-Encode the following formula into CNF using (a) the Tseitin encoding and (b) the Plaisted-Greenbaum encoding.
+Encode the following formula into CNF.
+\begin{enumerate}[label=\alph*)]
+\item Tseitin encoding (3 Points)
+\item Plaisted-Greenbaum encoding (3 Points)
+\end{enumerate}
 \begin{align*}
-(\overline{x_1} \wedge \overline{(x_3 \Leftrightarrow x_2)}) \vee ((x_3 \rightarrow \overline{x_4}) \wedge (x_1 \rightarrow (x_2 \wedge \overline{x_3})) \wedge (x_4))
+\Bigl(\overline{x_1} \wedge \overline{(x_3 \Leftrightarrow x_2)}\Bigr) \vee \Bigl((x_3 \rightarrow \overline{x_4}) \wedge \bigl(x_1 \rightarrow (x_2 \wedge \overline{x_3})\bigr) \wedge x_4\Bigr)
 \end{align*}
+
 
 \section{Resolution (3 Points)}
 
@@ -71,5 +56,29 @@ Construct a resolution refutation (i.e., proof of unsatisfiability) for the foll
 \end{align*}
 %
 We suggest to use this shorthand notation:~~$3\,4\,\overline{1}\,5$,~~$\overline{3}\,4\,5$,~~etc.
+
+
+\section{Pythagorean Triples (3 Points)}
+
+Find a 2-coloring of the integers $1 \leq i \leq 1000$ such that no Pythagorean triple is monochromatic.
+
+
+\section{Competition: Graph Coloring (7(+7) Points)}
+
+Implement a SAT-based graph vertex coloring solver.
+Your application should take as a single command line argument a DIMACS file with a graph.
+It needs to find the smallest number of colors needed to color the graph such that no adjacent vertices share the same color.
+The application should output the number of colors required.
+
+Together with your code (and build instructions), submit a single (PDF) slide to present your solution in a two-minute lightning talk.
+The overall most convincing submission(s) get(s) up to \highl{seven bonus points}.
+
+\vspace*{3mm}
+\noindent
+\textbf{Code skeleton:}\\
+\url{https://github.com/satlecture/kit2026/blob/main/code/src/graphcol.cc}\\[1em]
+\noindent
+\textbf{Benchmark instances:}\\
+\url{https://github.com/satlecture/kit2026/tree/main/exercises/coloring}
 
 \end{document}
