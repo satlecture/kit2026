@@ -395,7 +395,7 @@
 			\uncover<1->{%
 				\item Instance A:\ \ 260k variables, 850k clauses%
 				\begin{itemize}
-					\item Circuits are \highlo{not equivalent}
+					\item Circuits are \highlo{not equivalent}~~(``\highlo{buggy miter}'')
 					%\\-- \highl{erfüllende Belegung} führt zu \highlo{unterschiedlichen Outputs}
 					\item \highl{Solved in 1.33\,s} by \textsc{Kissat\_MAB\_prop-no\_sym}~\cite{gao2023kissat}
 				\end{itemize}%
@@ -434,7 +434,7 @@
 
 \begin{frame}{CEC Techniques~\cite{weaver2015equivalence}}
 	\begin{minipage}[c][8cm][t]{0.5\textwidth}
-		\textbf{Improving CEC performance}: Try to \highl{merge equivalent sub-circuits}
+		\textbf{Improving CEC}: Try to \highl{merge equivalent sub-circuits}
 		\begin{itemize}
 			\item Randomly test different inputs, collecting pairs of \highl{potentially equivalent nodes}
 			\item<2-> Use \highl{And/Inverter-Graph} (AIG) for simple circuit manipulation and merging
@@ -458,6 +458,37 @@
 	\end{minipage}%
 \end{frame}
 
+\begin{frame}{Our Latest Work on CEC}
+	\vspace*{-8mm}
+	\textbf{Parallel~~SAT~~Swee\text{\tiny \textcolor{white}{xa}}\!\!\!ping}~~~\unimp{(Rigi-Luperti, Biere, Schreiber 2026; to be published)}
+	\begin{itemize}
+		\item No information on circuits -- operates \highl{purely on CNF}!
+		\item Parallelization of Kissat's sweeping:\\
+		Sweeps limited environments in the \highl{Variable Incidence Graph} starting from selected variables
+	\end{itemize}
+	%\\[3mm]
+	
+	\only<1>{
+	\vspace*{5mm}
+	\centering
+	\includegraphics[scale=2]{figures/l11/parallel-sat-sweeping.pdf}
+	
+	\vspace*{3mm}
+	\centering
+	\unimp{\small Four workers}
+	}
+	
+	\only<2->{
+	\includegraphics[scale=1.5]{figures/l11/coupled-cdf-hw20-maxx300.pdf}
+	\includegraphics[scale=1.5]{figures/l11/sweep-cdf-hw12-maxx300.pdf}
+	\includegraphics[scale=1.5]{figures/l11/weakscaling-hw12.pdf}
+	
+	\vspace*{1mm}
+	\centering
+	\unimp{\small Benchmarks from Hardware Model Checking Competition (HWMCC) 2012 and 2020}
+	}
+\end{frame}
+
 \begin{frame}{CEC: Remarks}
 	\begin{itemize}
 		\item Important cornerstone of \textbf{Electronic Design Automation}~\cite{marques2000boolean}\\
@@ -469,19 +500,6 @@
 		\item Gate recognition and merging now a form of general inprocessing for \highl{any formula},\\
 		connected to variable elimination~\cite{biere2022gimsatul}
 	\end{itemize}
-\end{frame}
-
-\begin{frame}{Our Latest Work on CEC}
-	\textbf{Parallel~~SAT~~Swee\text{\tiny \textcolor{white}{xa}}\!\!\!ping}~~~\unimp{(Rigi-Luperti, Biere, Schreiber 2026; to be published)}
-	\\[5mm]
-	
-	\includegraphics[scale=1.5]{figures/l11/coupled-cdf-hw20-maxx300.pdf}
-	\includegraphics[scale=1.5]{figures/l11/sweep-cdf-hw12-maxx300.pdf}
-	\includegraphics[scale=1.5]{figures/l11/weakscaling-hw12.pdf}
-	
-	\vspace*{5mm}
-	\centering
-	\unimp{\small Benchmarks from Hardware Model Checking Competition (HWMCC) 2012 and 2020}
 \end{frame}
 
 \begin{frame}{Analyzing Cryptographic Building Blocks}
