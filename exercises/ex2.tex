@@ -17,99 +17,46 @@
 \input{../slides/l00-commands.tex}
 
 \begin{document}
-\exhead{2}{2025-05-20}{2024-06-03}
+\exhead{2}{2025-05-19}{2024-06-02}
 
-\newcommand{\statetilled}{T}
-\newcommand{\statetobetilled}{$+$}
-\newcommand{\statenottobetilled}{$-$}
 
-\section{Competition: SDVSTP (8(+8) Points)}
 
-Consider the well-known and industrially relevant \textit{Stardew Valley Soil Tilling Problem} (SDVSTP), which we also talked about (in a slightly simpler form) in the 0th exercise.
-\\
-We have a $w \times h$ 2D grid $G$ of ``soil'' cells. Each of the $w\cdot h$ cells is in exactly one of the following states: \emph{tilled} (\statetilled), \emph{should be tilled} (\statetobetilled), or \emph{must not be tilled} (\statenottobetilled).
-We also define the following five \textit{patterns} (corresponding to five increasing \textit{charging levels} of a hoe):
 
-\begin{figure}[h!]
-	\centering
-	\includegraphics[width=0.475\textwidth]{figures/sdvstp-patterns.pdf}
-\end{figure}
-\noindent
-We further define \emph{action} $a = (p,r,x,y)$ as follows: Rotate the pattern $p \in \{$base, copper, iron, gold, iridium$\}$ by $r \in \{0^\circ, 90^\circ\}$ and then align its \textit{upper left corner} with grid position $(x,y)$.
-Then $a$ is \textit{applicable} if the pattern is fully contained within $G$.
-Applying $a$ changes all cells in $G$ under the pattern to state \statetilled.
 
-A \textit{solution} for $G$ is a set of applicable actions $A = \{ a_1, a_2, \ldots, a_k \}$ such that applying each action in $A$ transforms $G$ into the grid $G'$ where all cells that were initially in state \statetobetilled{} are in state \statetilled{} and all cells that were initially in state \statenottobetilled{} are still in state \statenottobetilled{}.
-The objective is to find a solution that minimizes $k$.
 
-Devise a SAT-based SDVSTP solver.
-Your program should take a single argument, the path to an input file in the straight-forward \texttt{.sdvstp} format, structured as in the example in Fig.~\ref{fig:sdv-sol} (left).
-The solver should output a line ``\texttt{s SOLUTION k}'', where $k$ is the minimum number of required actions, followed by $k$ lines describing each individual action $(p,r,x,y) \in A$, as in Fig.~\ref{fig:sdv-sol} (center).
 
-\begin{figure}[h!]
-	\begin{minipage}{0.33\textwidth}
-		\begin{verbatim}
-			p sdvstp 8 5
-			++++++++
-			++++++++
-			++T--+++
-			+TT--+++
-			-------+
-			
-		\end{verbatim}
-	\end{minipage}%
-	\begin{minipage}{0.33\textwidth}
-		\begin{verbatim}
-			s SOLUTION 6
-			v gold    0 0 0
-			v gold    0 5 1
-			v iron   90 3 0
-			v copper 90 3 1
-			v base    0 0 3
-			v base    0 7 4
-		\end{verbatim}
-	\end{minipage}%
-	\begin{minipage}{0.33\textwidth}
-		\centering
-		\vspace*{2mm}
-		\includegraphics[width=0.8\textwidth]{figures/sdvstp-solution.pdf}\\[2mm]
-		~
-	\end{minipage}%
-	\caption{Left: Example \texttt{.sdvstp} input file specifying an $8\times 5$ grid.
-	Center: Possible corresponding output of the solver (columns aligned only for better readability).
-	Right: illustration of the grid and the output solution, with the top-left ``anchor point'' of each pattern marked with an arrow.
-	}
-	\label{fig:sdv-sol}
-\end{figure}
 
-You get 8 points for a correct SDVSTP solver that is able to solve easy instances within a few minutes.
-The best performing solution is awarded double the points.
 
-\vspace*{3mm}
-\noindent
-\textbf{Code skeleton:} \url{https://github.com/satlecture/kit2025/blob/main/code/src/sdvstp/sdvstp.cc}~\\[1ex]
-\noindent
-\textbf{Some benchmark instances:} \url{https://github.com/satlecture/kit2025/tree/main/exercises/sdvstp}
+\section{Application-specific Analysis (8 Points)}
 
-\newpage
+Pick \textbf{one} of the 30 largest benchmark families of the Anniversary SAT benchmark set (see lecture 4 slide 5).
+Research the following points:
+\begin{itemize}
+	\item Where does the family originate from and which people authored it?
+	\item What is the purpose of the benchmark family? (concrete application, exposing pathological solver behavior, highlighting certain techniques, \ldots)
+	\item Are the instances advertised to have any special properties? (e.g., clause length distribution, proof complexity, only SAT / only UNSAT, structural particularities, \ldots)
+	\item How did solvers in the 2022 anniversary track perform on the family? Are there discrepancies between the globally best solver(s) and the best solver(s) for that family? If so, can you find an explanation?
+	\item Are the instances good to parallelize, i.e., what is the distribution over the speedups which 2022 parallel solvers can achieve on the family?
+\end{itemize}
+Use Ashlin's GBD tool,\footnote{
+	Basic online functionality: \url{https://benchmark-database.de}; local installation via \texttt{pip}: \url{https://github.com/Udopia/gbd}
+} performance data of the 2022 anniversary track,\footnote{
+	\url{https://satcompetition.github.io/2022/downloads.html}
+} and the proceedings of past SAT Competitions, where you should find one or several abstracts describing the instances.
+\textit{You should not need to run a SAT solver nor download/open a SAT instance for this task.}
+Prepare 1--3 slides to present in the exercise.
 
-\section{CDCL (3+6 Points)}
-\subsection{a)}
-Simulate the CDCL algorithm by hand on the formula F. Select branching literals in the order $x_1,x_2,x_3, ...$. Draw the implication graph once a conflict occurs, learn the 1-UIP clause and continue CDCL search with the variable implied by the asserting learned clause. If everything goes right you should only encounter a single conflict before arriving a satisfying assignment. To emphasize the structure, each variable $x_i$ is just written as~$i$ and it's negation $\bar x_i$ as $-i$. So for example, $\bar x_4$ is written as $-4$ and $x_8$ as 8.
-\begin{align}
-	F = \{\{-1,-2,-4\}, \{-3, 6\}, \{-5,-6, 8\}, \{4,-8,10\}, \\ \{7,9\}, \{-2, -8, 9\}, \{-1,-9-10\},  \{-5,8,9\}\}
-\end{align}
 
-\subsection{b)}
-Repeat the CDCL algorithm, now for the larger formula $F'$. Again, select branching literals again in the order $x_1,x_2,x_3, ...$. Draw the implication graph at every conflict and give the learned 1-UIP clause. Provide the final assignment.
-\begin{align}
-	\centering
-	F' = &\{\{1, 13\}, \{-1, -2, 14\}, \{3, 15\}, \{4, 16\},\{-5, -3, 6\},  \notag \\
-	\quad & \{-5, -7\}, \{-6, 7, 8\}, \{-4, -8, -9\}, \{-1, 9, -10\},\notag \\
-	\quad & \{9, 11, -14\}, \{10, -11, 12\}, \{-2, -11, -12\}\}
-\end{align}
+\section{Automated Planning (6+3 Points)}
 
-~\\[1em]
+\begin{itemize}
+	\item[(a)] Show that classical automated planning is PSPACE-complete.\\
+	Hint: This entails that (a) classical automated planning is in PSPACE and (b) any polynomially space-bounded Turing machine program can be reduced to classical automated planning.
+	\item[(b)] Consider the connection between classical automated planning domains and Turing machines that follows from this result.
+	What is the correspondence of a Turing machine operating deterministically vs.~non-deterministically in a classical automated planning domain?
+\end{itemize}
+
+%~\\[1em]
 \section{Local Search Competition (7(+7) Points)}
 
 Using the methods from the lecture, as well as any others you find in the literature or invent yourself, implement an efficient local search SAT solver.
@@ -117,17 +64,31 @@ The solver should accept one argument, which is the path to an input file in DIM
 Easy-to-solve, satisfiable instances can be found in the Global Benchmark Database~(GBD)~[1].
 You can use the parser provided in the lecture~[2].
 The output format of your solver should adhere to the format used in the SAT competition which is specified online~[3].
-Solvers will be evaluated on a random set of satisfiable instances, and we will verify that the model is correct.
-Additionally, we will test your solver on unsatifiable instances.~\\[1em]
+Solvers will be evaluated on a random set of instances, and we will verify that found models are correct.
+%Additionally, we will test your solver on unsatifiable instances.
+~\\[1mm]
 
 \noindent
 [1] \textbf{Benchmark Instances:} \url{https://benchmark-database.de/?minisat1m=yes&result=sat}.\\[1ex]
 \noindent
 [2] \textbf{CNF Parser:} \url{https://github.com/satlecture/kit2025/blob/main/code/src/util/CNFFormula.h}.\\[1ex]
 \noindent
-[3] \textbf{Output Format:} \url{https://satcompetition.github.io/2025/output.html}.\\[1em]
+[3] \textbf{Output Format:} \url{https://satcompetition.github.io/2025/output.html}.\\[1mm]
 
 \noindent
-You will receive seven points for a local search solver that can correctly solve easy instances in a few minutes. The solution with the best performance will receive double the points.
+Together with your code (and build instructions), submit a single (PDF) slide to present your solution in a two-minute lightning talk.
+You will receive seven points for a local search solver that can correctly solve easy instances in a few minutes.
+The overall most convincing submission(s) get(s) up to \highl{seven bonus points}.
+
+
+
+
+
+
+
+
+
+
+
 
 \end{document}
