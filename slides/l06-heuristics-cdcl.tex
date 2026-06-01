@@ -6,6 +6,7 @@
 \usepackage{tabularx}
 \usepackage{tikzsymbols}
 \usepackage{tikz}
+\usepackage{transparent}
 \usetikzlibrary{positioning,fit,shapes}
 \usepackage[lined,linesnumbered,ruled,noend]{algorithm2e}
 \renewcommand{\thealgocf}{}
@@ -23,9 +24,9 @@
 
 % define title etc.pp.
 \title{Practical SAT Solving}
-\subtitle{Lecture 4 \unimp{\normalfont -- Elementary SAT Solving Heuristics, Conflict-Driven Clause Learning}}
+\subtitle{Lecture 6 \unimp{\normalfont -- Elementary SAT Solving Heuristics, Conflict-Driven Clause Learning}}
 \author{\underline{Ashlin Iser}, Dominik Schreiber}
-\date{May 12, 2025}
+\date{June 1, 2026}
 
 % define commands
 \input{l00-commands.tex}
@@ -39,24 +40,32 @@
 \end{frame}
 
 \begin{frame}{Overview}
-	\begin{block}{Recap. Lecture 3: Elementary SAT Solving Algorithms}
+	\begin{block}{Recap.}
 		\begin{itemize}\setlength{\itemsep}{1ex}
-			\item Local Search
-			\item Resolution
-			\item DP Algorithm
-			\item DPLL Algorithm
+			\item Lectures 4 \& 5: Applications of SAT Solving
+			\item Lecture 3: Elementary SAT Solving Algorithms
+			\begin{itemize}
+				\item Local Search
+				\item Resolution, Saturation, and DP Algorithm
+				\item DPLL Algorithm
+			\end{itemize}
 		\end{itemize}
 	\end{block}
 	\pause
-	\begin{block}{Today's Topics}
+	\begin{block}{Today's Topics: More on Algorithmic Methods}
 		\begin{itemize}\setlength{\itemsep}{1ex}
-			\item Elementary SAT Solving Heuristics
+			\item DPLL: Elementary SAT Solving Heuristics
 			\begin{itemize}
 				\item Branching Order
 				\item Branching Polarity
 				\item Restart Strategies
 			\end{itemize}
-			\item Conflict-Driven Clause Learning
+			\item Conflict-Driven Clause Learning (CDCL)
+			\begin{itemize}
+				\item Implication Graphs
+				\item Conflict Analysis
+				\item Non-Chronological Backtracking
+			\end{itemize}
 		\end{itemize}
 	\end{block}
 \end{frame}
@@ -100,7 +109,7 @@
 \textbf{Desired properties}\\[1ex]
 \begin{itemize}\setlength{\itemsep}{1ex}
 	\item Fast to compute
-	\item Gives easy sub-problems\\[3pt]
+	\item Gives \highlow{easy sub-problems}\\[3pt]
 	\pause
 	\begin{itemize}\setlength{\itemsep}{1ex}
 		\item Satisfy many clauses
@@ -110,7 +119,6 @@
 ~\\
 \pause
 \textbf{Types of heuristics}\\[1ex]
-\pause
 \begin{itemize}\setlength{\itemsep}{1ex}
 	\item Static vs. Dynamic\\[3pt]
 	\begin{itemize}\setlength{\itemsep}{1ex}
@@ -225,17 +233,19 @@ Goal: assign variables with \highl{high occurrence in short clauses}\\[1ex]
 \vspace{-1em}
 Given $n$ runs of \highl{randomized DPLL search}, what is the \highl{average number of backtracks} per run?\\[2em]
 \begin{columns}
-\begin{column}{0.5\textwidth}
+\begin{column}{0.6\textwidth}
 	\centering
 		\includegraphics[width=.7\textwidth]{figures/l04/heavy-tail-1}\\
-		\only<1>{Heavy-tailed distribution\\}
-		\only<2>{\highlow{Heavy-tailed distribution}\\}
+		\highlow{Heavy-tailed distribution}\\
 		% $P[X > x] \sim C \cdot x^{-\alpha}, \quad C > 0, \alpha \in (0,2)$
 \end{column}
-\begin{column}{0.5\textwidth}
+\begin{column}{0.4\textwidth}
 	\centering
+	{
+	\transparent{0.5}
 	\includegraphics[width=.7\textwidth]{figures/l04/heavy-tail-2}\\
-	Standard distribution\\
+	\textit{For Reference:}\\ Standard distribution\\
+	}
 	% $P[X > x] \sim \frac{1}{x\sqrt{2\pi}}e^{-x^2/2}$
 \end{column}
 \end{columns}~\\[2em]
@@ -294,7 +304,7 @@ Clear the partial assignment and backtrack to the root of the search tree.\\[1ex
 \begin{frame}{Restart Strategies: Luby Sequence}
 \begin{blueblock}{Theorem \href{https://doi.org/10.1016/0020-0190(93)90029-9}{[Luby et al, 1993]}}
 	Consider a \highlow{Las Vegas} algorithm $A$ (i.e., correct but with \highlow{random run time}) and a restart strategy $S = \langle t_1, t_2, \ldots \rangle$ (i.e., run $A$ for time $t_1$, then for time $t_2$, etc.).	
-	Up to a constant factor, the Luby sequence is the \highl{best possible universal strategy} to minimize the \highl{expected run time} until a run is successful.
+	Up to a constant factor, the Luby sequence is the \highlow{best possible universal strategy to minimize the expected run time} until a run is successful.
 	\begin{align*}
 		Luby = u \cdot (t_i)_{i \in \mathbb{N}} \quad \text{with} \quad t_i = \begin{cases}
 			2^{k-1} & \text{if $i = 2^k - 1$} \\
@@ -307,73 +317,93 @@ Clear the partial assignment and backtrack to the root of the search tree.\\[1ex
 		
 \begin{frame}{Restart Strategies: Luby Sequence}
 \begin{columns}[T]
-\begin{column}{0.45\textwidth}
+\begin{column}{0.5\textwidth}
 	\centering
 	\includegraphics[width=\textwidth]{figures/l04/restart-luby-legend}
 \end{column}
-\begin{column}{0.5\textwidth}
+\begin{column}{0.45\textwidth}
 \begin{algorithm}[H]
 	\DontPrintSemicolon
 	\caption{Luby Sequence}
-	\KwIn{int i}
+	\KwIn{int $i \geq 1$ \tcp*[f]{index of the $i$-th restart}}
 	\BlankLine
-	\For {$k = 1$ \KwTo $32$} {
-		\If {$i == (1 \ll k) - 1$} {
-			\Return $1 \ll (k-1)$
-		}
+	\tcc{determine smallest $k$ with $i \leq 2^k - 1$, i.e. $k = \lceil \log_2(i+1) \rceil$}
+	$k \gets 1$\;
+	\While {$i > (1 \ll k) - 1$} {
+		$k \gets k + 1$
 	}
 	\BlankLine
-	\For {$k = 1$ \KwTo $\infty$} {
-		\If {$(1 \ll (k-1)) \leq i \leq (1 \ll k) - 1$} {
-			\Return Luby($i - (1 \ll (k-1)) + 1$)
-		}
+	\tcp{emit peak}
+	\If {$i == (1 \ll k) - 1$} {
+		\Return $1 \ll (k-1)$
 	}
-\end{algorithm}~\\[1ex]
-run DPLL() with conflict-limit $512 \cdot$ \text{Luby}(++restarts)
+	\BlankLine
+	\tcp{recurse into first half}
+	\Return Luby($i - (1 \ll (k-1)) + 1$)
+\end{algorithm}
 \end{column}
-\end{columns}
+\end{columns}~\\[1ex]
+Example usage in SAT solvers: Run DPLL() with conflict-limit $512 \cdot$ \text{Luby}(++restarts)
 \end{frame}
 		
 \begin{frame}{Restart Strategies: Luby Sequence}
 \begin{blueblock}{Luby Sequence: Reluctant Doubling}
-A more efficient implementation of the Luby sequence invented by Donald Knuth\\[1ex]
-Use the $v_n$ of the following pairs $(u_n, v_n)$:\\[1ex]
-\texttt{($u_1$, $v_1$) = (1, 1);}\\
-\texttt{($u_{n+1}$, $v_{n+1}$) = $u_n$ \& -$u_n$ == $v_n$\ ?\ ($u_n$+1, 1) :\ ($u_n$, 2$v_n$);}~\\[1em]
-\textbf{Example: }$(1,1), (2,1), (2,2), (3,1), (4,1), (4,2), (4,4), (5,1), \ldots$
+A more efficient implementation of the Luby sequence invented by Donald Knuth.\\[1ex]
+Use the $v_n$ of the following pairs $(u_n, v_n)$:
+\begin{align*}
+(u_1, v_1) &\;:=\; (1,\, 1) \\[0.4ex]
+(u_{n+1}, v_{n+1}) &\;:=\;
+\bigl(u_n \mathbin{\&} (-u_n)\bigr) = v_n
+\;\;\mathrel{?}\;\; (u_n{+}1,\, 1)
+\;\;\mathrel{:}\;\; (u_n,\, 2 \cdot v_n)
+\end{align*}~\\[1ex]
+\textbf{Example: }$(1,\mathbf{1}), (2,\mathbf{1}), (2,\mathbf{2}), (3,\mathbf{1}), (4,\mathbf{1}), (4,\mathbf{2}), (4,\mathbf{4}), (5,\mathbf{1}), \ldots$\\[1em]
+\textbf{Intuition: }$u_n$ counts which ``run'' we are in; $v_n$ doubles inside that run until it reaches the lowest set bit of $u_n$, at which point Luby's recursive structure demands a reset.
+The $u \mathbin{\&} (-u)$ part is a one-instruction way to isolate that bit.
 \end{blueblock}
 \end{frame}
 
 
 \begin{frame}{Branching Polarity: Phase Saving}
-Observation: Frequent {restarts} decrease performance on some satisfiable instances\\[1em]
-\begin{blueblock}{Phase Saving / Assignment Caching}
-Idea: Remember \highlow{last assignment of each variable} and use it first in branching\\[1ex]
-\begin{columns}[T]
-\begin{column}{0.7\textwidth}
-\begin{itemize}\setlength{\itemsep}{1em}
-	\item First implemented in \href{http://reasoning.cs.ucla.edu/rsat/}{RSAT (2006)}
-	\item Result: Phase saving stabilizes positive effect of restarts
-	\item Best results in combination with non-chronological backtracking (follows)
+\textbf{Observation:} Frequent restarts can \highlow{destroy useful work} on satisfiable instances --- after a restart, the solver may pick the opposite polarity and re-explore parts of the search space it had already shown to be consistent.\\[1em]
+\begin{blueblock}{Phase Saving / Assignment Caching \hfill \href{http://reasoning.cs.ucla.edu/rsat/}{[RSAT, 2006]}}
+	\vspace{0.3em}
+	\begin{columns}[T]
+		\begin{column}{0.02\textwidth}\end{column}
+		\begin{column}{0.62\textwidth}
+\textbf{Idea:} Remember the \highlow{last assigned value} of each variable and reuse it the next time the variable is branched on (after a restart or backtrack).\\[1ex]
+\begin{itemize}\setlength{\itemsep}{0.8em}
+	\item Preserves consistent assignments across restarts
+	\item \highlow{Stabilizes} the positive effect of frequent restarts
+	\item Especially effective combined with \highlow{non-chronological backtracking} (next topic): the solver can jump back over a satisfied component and later restore it from cache
 \end{itemize}
 \end{column}
-\begin{column}{0.3\textwidth}
+\begin{column}{0.27\textwidth}
 \centering
-\begin{tikzpicture}[every node/.style = {draw, minimum width=1cm, minimum height=0.6cm}]
-	\node (A) [ellipse, fill=green] {A};
-	\node (B) [ellipse, fill=green, right=0.5cm of A, minimum width=1cm, minimum height=1.5cm] {B};
-	\node (C) [ellipse, fill=red, below=0.15cm of B] {C\blitz};
-	\node (D) [draw=none, ellipse, below=0.5cm of A] {F};
-	\node (F) [ellipse, fit=(A) (B) (D)] {};
-\end{tikzpicture}~\\
-Example: $A$ and $B$ are satisfied,\\ searching in component $C$
+\begin{tikzpicture}[
+		cluster/.style = {ellipse, draw, thick, minimum width=1.1cm, minimum height=0.7cm, font=\small},
+		formula/.style = {ellipse, draw, thick, dashed, inner sep=4pt, font=\small\itshape}
+	]
+	\node[cluster, fill=green!55] (A) {$A$};
+	\node[cluster, fill=green!55, right=0.4cm of A, minimum height=1.6cm] (B) {$B$};
+	\node[cluster, fill=red!65,  below=0.1cm of B] (C) {$C$\,\blitz};
+	\node[formula, fit=(A) (B) (C), inner sep=8pt, label={[font=\scriptsize\itshape]above left:$F$}] {};
+\end{tikzpicture}\\[0.8ex]
+\begin{flushleft}\footnotesize
+$A$, $B$, $C$: \highlow{clusters of variables};\\ $F$: the whole formula.\\[0.3ex]
+\textcolor{green!55!black}{\textbf{green}} = satisfied component,\\ \textcolor{red!75!black}{\textbf{red}} = current conflict.\\[0.3ex]
+Phase cache restores $A$, $B$ \highlow{without re-search}.
+\end{flushleft}
 \end{column}
+		\begin{column}{0.02\textwidth}\end{column}
 \end{columns}
+\vspace{0.3em}
 \end{blueblock}
 \end{frame}
 
 \begin{frame}{Recap}
 	\begin{block}{Decision Heuristics}
+		B\"ohm, MOMS, Jeroslow-Wang, (R)DLCS / (R)DLIS
 	\end{block}
 	\begin{block}{Restart Strategies}
 		\begin{itemize}\setlength{\itemsep}{1ex}
@@ -416,7 +446,7 @@ Example: $A$ and $B$ are satisfied,\\ searching in component $C$
 		\node[below=of c0] (x0) { X };
 		\node[below=of x0, xshift=-2em] (y0) { [Y=1] };
 		\node[below=2ex of y0] (z1) { [Z=1,Z=0]\blitz };
-		\node[right=1ex of y0] (z0) { [Z=1,Z=0]\blitz };
+		\node[below=of x0, xshift=2em] (z0) { [Z=1,Z=0]\blitz };
 
 		\draw[->] (a) -- (b0) node [near start, left] {1} -- (c0) node [near start, left] {1} -- (x0) node [near start, left] {1} -- (y0) node [near start, left] {1} -- (z1);
 		\draw[->] (x0) -- (z0) node [near start, right] {0};
@@ -448,51 +478,56 @@ Example: $A$ and $B$ are satisfied,\\ searching in component $C$
 
 
 \begin{frame}{Implication Graph}
+\textbf{Idea:} Make the \highlow{causal structure} of unit propagation explicit, so we can read off \emph{why} a conflict occurred and \emph{which earlier decisions are to blame}.\\[1em]
 \begin{blueblock}{Definition: Implication Graph}
 Given a formula $F$, assignment trail $T$, and conflicting clause $C$,\\
-the implication graph is a DAG $G=(V \cup \{ \text{\blitz} \},E)$ of \\[1ex]
-\begin{itemize}\setlength{\itemsep}{1em}
-	\item vertices $[\ell_i,d_i]$ for each literal $\ell_i$ with decision level $d_i$ on the trail
-	\item vertex \blitz{} representing the conflicting assignment\\[1ex] Note: all literals of $C$ have edges to \blitz{}
-	\item edges $\bigl([\ell_i, d_i], [u_{i,j}, d_i]\bigr)$ for each propagated literal $u_{i,j}$ at decision level $d_i$
+the implication graph is a DAG $G=(V \cup \{ \text{\blitz} \},E)$ where\\[1ex]
+\begin{itemize}\setlength{\itemsep}{0.8em}
+	\item each vertex $[\ell_i, d_i]$ corresponds to a literal $\ell_i$ on the trail together with its \highlow{decision level} $d_i$
+	\item the special vertex \blitz{} represents the \highlow{conflict};\\[1ex]
+	all literals of $C$ have edges to \blitz{}
+	\item there is an edge $\bigl([\ell_i, d_i], [u_{i,j}, d_i]\bigr)$ whenever $u_{i,j}$ was propagated by a clause containing $\lnot\ell_i$\\[1ex] (i.e., $\ell_i$ is one of the \highlow{reasons} for $u_{i,j}$)
 \end{itemize}
-\end{blueblock}~\\[1em]
-The sink is always the \highlo{conflicting assignment}, and the sources are the \highlo{desicion literals} involved in the conflict.\\[1ex]
-We can use this to determine the \highlo{reasons for the conflict}.
+\end{blueblock}
 \end{frame}
 
 
 \begin{frame}{Example: Implication Graph}
 Implication graph for the conflicting state under the trail $A, B, C, X, Y, Z$.\\
-The edge labels denote \highlo{clauses}, node labels indicate a variable assignment and its \highlow{decision level}.\\
+Node labels show a variable assignment with its \highlow{decision level}; edge labels denote the \highlo{propagating clause}.
 \begin{columns}[T]
-\begin{column}{0.3\textwidth}
+\begin{column}{0.32\textwidth}
 ~\\[1ex]
-\begin{itemize}\setlength{\itemsep}{1em}
-	\item Consider inferring the clause $\{\neg A, \neg X\}$ by the following resolution steps: $(7 \circ_Z 5) \circ_Y 3$.
-	\item Learning of $\{\neg A, \neg X\}$ prevents the solver choosing the same partial assignment again.
-\end{itemize}
+\textbf{Reading the graph:}
+\begin{itemize}\setlength{\itemsep}{0.5em}
+	\item \highlo{Source} $A$ is the only decision literal causing the conflict ($B$, $C$ are irrelevant).
+	\item \highlo{Sink} \blitz{} is the conflict; its in-edges come from the conflicting clause $\{\neg A, \neg Y, \neg Z\}$ (clause~7).
+	\item Any \highlo{cut} separating $A$ from \blitz{} yields a \highlo{candidate learned clause}.
+\end{itemize}~\\[0.4em]
 \end{column}
 \begin{column}{0.35\textwidth} 
-\begin{tikzpicture}[->, thick, node distance=0.7cm]
+\begin{tikzpicture}[->, thick, node distance=0.05cm and 2cm,
+		every edge/.append style={shorten >=1pt, shorten <=1pt},
+		every node/.append style={inner sep=1pt},
+		elbl/.style={font=\small, inner sep=1pt, sloped, above, anchor=south}]
 \node (A) [circle] { $_{\highlow 1}A=1$ };
-\node (B) [circle, below=of A, yshift=1cm] { $_{\highlow 2}B=1$ }; 
-\node (C) [circle, below=of B, yshift=1cm] { $_{\highlow 3}C=1$ };
-\node (X) [circle, below=of C, yshift=1cm] { $_{\highlow 4}X=1$ };
-\node (Y) [circle, right=of X, yshift=0.9cm] { $_{\highlow 4}Y=1$ };
-\node (Z) [circle, right=of Y, yshift=0.9cm] { $_{\highlow 4}Z=1$ };
+\node (B) [circle, below=of A] { $_{\highlow 2}B=1$ }; 
+\node (C) [circle, below=of B] { $_{\highlow 3}C=1$ };
+\node (X) [circle, below=of C] { $_{\highlow 4}X=1$ };
+\node (Y) [circle, right=of X, yshift=0.45cm] { $_{\highlow 4}Y=1$ };
+\node (Z) [circle, right=of Y, yshift=0.45cm] { $_{\highlow 4}Z=1$ };
 \node (empty) [circle, right=of Z] { \blitz };
 
-\draw (A) -- (Y) node [midway, above] {\highlo 3 };
-\draw (A) -- (Z) node [midway, below] {\highlo 5 };
-\draw (A) -- (empty) node [midway, above] {\highlo 7 };
-\draw (Y) -- (Z) node [midway, above] {\highlo 5 };
-\draw (Z) -- (empty) node [midway, above] {\highlo 7 };
-\draw (X) -- (Y) node [midway, above] {\highlo 3 };
-\draw (Y) -- (empty) node [near start, below] {\highlo 7 };
+\draw (X) -- (Y) node [elbl, pos=0.5] {\highlo 3 };
+\draw (Y) -- (Z) node [elbl, pos=0.5] {\highlo 5 };
+\draw (Z) -- (empty) node [elbl, pos=0.5] {\highlo 7 };
+\draw (A) to[bend left=15] node [elbl, pos=0.55] {\highlo 3 } (Y);
+\draw (A) to[bend left=25] node [elbl, pos=0.6] {\highlo 5 } (Z);
+\draw (A) to[bend left=35] node [elbl, pos=0.65] {\highlo 7 } (empty);
+\draw (Y) to[bend right=15] node [elbl, pos=0.5] {\highlo 7 } (empty);
 \end{tikzpicture}%
 \end{column}%
-\begin{column}{.25\textwidth} 
+\begin{column}{.23\textwidth} 
 \begin{align*}
 \{ & \{A, B\}, \tag{\highlo{1}}\\
 & \{B, C\}, \tag{\highlo{2}}\\
@@ -503,34 +538,42 @@ The edge labels denote \highlo{clauses}, node labels indicate a variable assignm
 & \{\neg A, \neg Y, \neg Z \} \}\tag{\highlo{7}}
 \end{align*}%
 \end{column}%
-\end{columns}
+\end{columns}~\\[1ex]
+\textbf{Example cut $\{\neg A, \neg X\}$:}
+derive by resolution $(7 \circ_Z 5) \circ_Y 3$;\\
+Learning it forbids the same partial assignment from being revisited.
 \end{frame}
 
 \begin{frame}{Conflict Analysis: Implementation}
-Implement trail as \highlo{stack of literals} together with a pointer to the \highlo{reason clause} (\emph{null} for decisions) and the \highlo{decision level}. On each conflict, use the trail to trace back the implications to the conflict sources.\\[1em]
-\textbf{Example:} Trail with conflicting clause $\{\lnot A, \lnot Y, \lnot Z \}$\\[1ex]
+Implement the trail as a \highlo{stack of literals}, each paired with a pointer to its \highlo{reason clause} (\emph{null} for decisions) and its \highlo{decision level}. On a conflict, walk the trail top-down and \highlow{resolve} the conflicting clause against the reason clauses of the involved literals until only one literal of the current decision level remains.\\[1em]
+\textbf{Example:} Conflict on clause $\{\lnot A, \lnot Y, \lnot Z \}$ at decision level~4.\\[1ex]
 \begin{columns}[T]
-\begin{column}{.3\linewidth}
-	\begin{tabular}{ccl}
-	\textbf{Var.} & \textbf{Lvl.} & \textbf{Reason} \\
-	\blitz & 4 & $\{\lnot A, \lnot Y, \lnot Z \}$ \\
-	Z & 4 & $\{\lnot A, \lnot Y, Z \}$ \\
-	Y & 4 & $\{\lnot A, \lnot X, Y \}$ \\
-	X & 4 & null\\
-	C & 3 & null\\
-	B & 2 & null\\
-	A & 1 & null\\
+\begin{column}{.32\linewidth}
+	\centering
+	\begin{tabular}{@{}c@{\;\;}c@{\;\;}l@{}}
+	\textbf{Var.} & \textbf{Lvl.} & \textbf{Reason} \\\hline
+	{\color{myred}\blitz} & 4 & {\color{myred}$\{\lnot A, \lnot Y, \lnot Z \}$} \\
+	\highlo{Z} & 4 & $\{\lnot A, \lnot Y, Z \}$ \\
+	\highlo{Y} & 4 & $\{\lnot A, \lnot X, Y \}$ \\
+	X & 4 & \emph{null}\\
+	C & 3 & \emph{null}\\
+	B & 2 & \emph{null}\\
+	A & 1 & \emph{null}\\
 	\end{tabular}
 \end{column}
-\begin{column}{.6\linewidth}
+\begin{column}{.62\linewidth}
 	\textbf{Trail Resolution:}
-	\setlength{\leftmargini}{1em}
-	\begin{itemize}\setlength{\itemsep}{1ex}
-	\item $\{\lnot A, \lnot Y, \lnot Z\}\!\otimes_Z\!\{\lnot A, \lnot Y, Z\}\!=\!\{\lnot A, \lnot Y\}$
-	\item $\{\lnot A, \lnot Y\}\!\otimes_Y\!\{\lnot A, \lnot X, Y \}\!=\!\{\lnot A, \lnot X\}$
-	\item Conflict Clause $C = \{\lnot A, \lnot X\}$
-	% \item Backtrack Level $b = 1$
-	\end{itemize} 
+	\setlength{\leftmargini}{1.2em}
+	\begin{itemize}\setlength{\itemsep}{0.6em}
+	\item Start from the conflicting clause:\\[2pt]
+		$\{\lnot A, \lnot Y, \lnot Z\}$
+	\item Resolve on \highlo{$Z$} with reason of $Z$:\\[2pt]
+		$\{\lnot A, \lnot Y, \lnot Z\} \mathbin{\otimes_{\highlo Z}} \{\lnot A, \lnot Y, Z\} \;=\; \{\lnot A, \lnot Y\}$
+	\item Resolve on \highlo{$Y$} with reason of $Y$:\\[2pt]
+		$\{\lnot A, \lnot Y\} \mathbin{\otimes_{\highlo Y}} \{\lnot A, \lnot X, Y\} \;=\; \{\lnot A, \lnot X\}$
+	\item Stop: only one literal ($\lnot X$) of level~4 remains.\\[2pt]
+		\highlow{Learned clause:} $C = \{\lnot A, \lnot X\}$
+	\end{itemize}
 \end{column}
 \end{columns}
 \end{frame}
@@ -556,16 +599,13 @@ Several possibilities to learn a clause from an implication graph exist.\\[1em]
 			
 			
 \begin{frame}{Conflict Analysis: 1-UIP Learning}
-\begin{itemize}\setlength{\itemsep}{1em}
-\item FirstUIP Clause:\\[1ex]
-Resolve the conflicting clause and reason clauses until only a single literal of the current decision level remains.
-\item Advantage:\\[1ex]
-\begin{itemize}\itemsep1ex
+Resolve the conflicting clause and reason clauses until only a single literal of the current decision level remains.\\[1em]
+\textbf{Advantage:}
+\begin{itemize}\itemsep1em
 	\item Stopping at a UIP always leads to an asserting clause.
 	\item A clause is asserting if all literals are false except one, which is unassigned.
 	\item Algorithm becomes simpler: backtrack until clause becomes asserting.
-\end{itemize}
-\item In 1-UIP learning, the backtrack level is always the second highest level in a conflict clause.
+	\item The backtrack level is always the second highest level in a conflict clause.
 \end{itemize}
 \end{frame}
 
@@ -644,25 +684,35 @@ Conflicting Clause:
 
 
 \begin{frame}{Clause Learning: Further Reading}
+\textbf{Beyond 1-UIP:} apply the UIP idea on \highlow{every} decision level (\highlo{all-UIP}) so that each level contributes at most one literal to the learned clause.
+This can produce much shorter clauses. 
+But, unlike 1-UIP, it may also \highlow{introduce new literals} on lower levels, so the clause could actually grow.\\[1em]
 \begin{itemize}\itemsep1em
-	\item \href{https://doi.org/10.1007/978-3-030-51825-7_3}{Clause Size Reduction with all-UIP Learning (Feng and Bacchus, 2020)}
-	\item \href{https://doi.org/10.1007/978-3-030-80223-3\_12}{Efficient All-UIP Learned Clause Minimization (Fleury and Biere, 2021)}
+	\item \href{https://doi.org/10.1007/978-3-030-51825-7_3}{\highlo{Feng \& Bacchus, SAT 2020} -- Clause Size Reduction with all-UIP Learning}\\[1ex]
+	First \highlow{good background overview of learning variants}, then introduces all-UIP shrinking.
+	Naively too expensive and prone to enlarging the clause, so they \highlow{guard it} with several heuristics.
+
+	\item \href{https://doi.org/10.1007/978-3-030-80223-3_12}{\highlo{Fleury \& Biere, SAT 2021} -- Efficient All-UIP Learned Clause Minimization}\\[1ex]
+	Reformulate all-UIP shrinking. Their algorithm is \highlow{linear in the size of the implication graph} -- cheap enough to run \highlow{unconditionally to completion}, no heuristic gating needed.
 \end{itemize}
 \end{frame}
 
 			
-\begin{frame}{Resolution Proof}
-\begin{blueblock}{Properties of conflict clause C}
-\begin{itemize}\setlength{\itemsep}{1em}
-	\item $F \models C$ 
-	\item $F \cup \lnot C \vdash_{UP} \bot$
-	\item $\forall D \subseteq C, D \notin F$
+\begin{frame}{From Clause Learning to Resolution Proofs}
+\textbf{Key observation:} Each learned clause $C$ is obtained by a chain of \highlow{resolutions} on reason clauses (cf.\ trail resolution).\\
+So CDCL is, at heart, a resolution-proof generator.\\[1ex]
+\begin{blueblock}{Properties of every learned clause $C$}
+\begin{itemize}\setlength{\itemsep}{1ex}
+	\item \highlo{Sound:} $F \models C$ \hfill (resolution is sound)
+	\item \highlo{Propagation-derivable:} $F \cup \lnot C \vdash_{UP} \bot$ \hfill ($\lnot C$ triggers a conflict by unit propagation alone)
+	\item \highlo{Non-redundant:} no $D \subsetneq C$ is already in $F$
 \end{itemize}
-\end{blueblock}~\\
-\begin{blueblock}{Certificates for Unsatisfiability}
-\begin{itemize}\setlength{\itemsep}{1em}
-	\item sequence of learned clauses serves as a \highlo{proof of unsatisfiability}
-	\item can be used to validate the correctness of the SAT result in \highlo{high risk applications}
+\end{blueblock}
+\begin{blueblock}{Certificates of Unsatisfiability}
+\begin{itemize}\setlength{\itemsep}{1ex}
+	\item If CDCL derives the empty clause $\bot$, the \highlow{sequence of learned clauses} is a \highlo{resolution refutation} of $F$.
+	\item Emitted as a \highlo{DRAT / LRAT proof} and \highlow{independently checked} (e.g.\ \texttt{drat-trim}, verified checkers in Coq/Isabelle).
+	\item Standard in \highlo{SAT competitions} and \highlo{high-assurance applications} (verification, certified mathematics, etc.).
 \end{itemize}
 \end{blueblock}
 \end{frame}
@@ -683,7 +733,8 @@ Conflicting Clause:
 			\item Luby Sequence / Reluctant Doubling
 			\item Branching Heuristic: Phase Saving
 		\end{itemize}
-		\item Conflict Analysis, Clause Learning
+		\item Conflict Analysis, Clause Learning, and Non-chronological Backtracking
+		\item Resolution Proofs
 	\end{itemize}
 \end{block}
 \end{frame}

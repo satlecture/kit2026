@@ -21,6 +21,7 @@ See also [the page from last year](https://github.com/satlecture/kit2025).
 * **Monday, May 4**: [L3 - Elementary SAT Solving Algorithms (SLS, Resolution, Saturation, DP, DPLL)](slides/l03-sls-dpll.pdf) _[DS]_
 * **Monday, May 11**: [L4 - Application Highlights I (until slide 13)](slides/l04-application-highlights-1.pdf) _[DS]_
 * **Monday, May 18**: [L5 - Application Highlights II (from slide 14)](slides/l04-application-highlights-1.pdf) _[DS]_
+* **Monday, June 1**: [L6 - Elementary SAT Solving Heuristics, Conflict-Driven Clause Learning](slides/l06-heuristics-cdcl.pdf) _[AI]_
 
 ## Exercises
 
@@ -29,4 +30,4 @@ See also [the page from last year](https://github.com/satlecture/kit2025).
 
 ## Code
 
-* **Tuesday, May 5**: [E0 - Pigeon Hole Principle, Cardinality Contraint Encodings, Incremental SAT Solving](code/phole.cc) _[AI]_
+* **Tuesday, May 5**: [E0 - Pigeon Hole Principle, Cardinality Contraint Encodings, Incremental SAT Solving](https://github.com/satlecture/kit2026/blob/main/code/src/phole.cc) _[AI]_
