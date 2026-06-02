@@ -25,8 +25,9 @@ See also [the page from last year](https://github.com/satlecture/kit2025).
 
 ## Exercises
 
-* **Tuesday, May 5**: [E0 - Getting Started, Release of Exercise Sheet 1 (Introduction, Encodings)](exercises/ex1.pdf) _[AI]_
-* **Tuesday, May 19**: [E1 - Discussing Exercise Sheet 1 (Introduction, Encodings), Release of Exercise Sheet 2 (Applications, Local search)](exercises/ex2.pdf) _[DS]_
+* **Tuesday, May 5**: E0 - Getting Started, [Release of Exercise Sheet 1 (Introduction, Encodings)](exercises/ex1.pdf) _[AI]_
+* **Tuesday, May 19**: E1 - Discussing Exercise Sheet 1 (Introduction, Encodings), [Release of Exercise Sheet 2 (Applications, Local search)](exercises/ex2.pdf) _[DS]_
+* **Tuesday, June 2**: E2 - Discussing Exercise Sheet 2 (Applications, Local Search), [Release of Exercise Sheet 3 (Resolution, CDCL, SDVSTP)](exercises/ex3.pdf) _[AI]_
 
 ## Code
 

@@ -17,12 +17,34 @@
 \input{../slides/l00-commands.tex}
 
 \begin{document}
-\exhead{3}{2024-06-03}{2024-06-17}
+\exhead{3}{2026-06-02}{2026-06-16}
+
+\section{Conflict-Driven Clause Learning (3+6 Points)}
+\subsection{a) Small Formula (3 Points)}
+Simulate the CDCL algorithm by hand on the formula F. Select branching literals in the order $x_1,x_2,x_3, ...$. Draw the implication graph once a conflict occurs, learn the 1-UIP clause and continue CDCL search with the variable implied by the asserting learned clause. If everything goes right you should only encounter a single conflict before arriving a satisfying assignment. To emphasize the structure, each variable $x_i$ is just written as~$i$ and it's negation $\bar x_i$ as $-i$. So for example, $\bar x_4$ is written as $-4$ and $x_8$ as 8.
+\begin{align}
+	F = \bigl\{\{-1,-2,-4\}, \{-3, 6\}, \{-5,-6, 8\}, \{4,-8,10\}, \\ \{7,9\}, \{-2, -8, 9\}, \{-1,-9-10\},  \{-5,8,9\}\bigr\}
+\end{align}
+
+\subsection{b) Larger Formula (6 Points)}
+Repeat the CDCL algorithm, now for the larger formula $F'$. Again, select branching literals again in the order $x_1,x_2,x_3, ...$. Draw the implication graph at every conflict and give the learned 1-UIP clause. Provide the final assignment.
+\begin{align}
+	\centering
+	F' = &\bigl\{\{1, 13\}, \{-1, -2, 14\}, \{3, 15\}, \{4, 16\},\{-5, -3, 6\},  \notag \\
+	\quad & \{-5, -7\}, \{-6, 7, 8\}, \{-4, -8, -9\}, \{-1, 9, -10\},\notag \\
+	\quad & \{9, 11, -14\}, \{10, -11, 12\}, \{-2, -11, -12\}\bigr\}
+\end{align}
+
+
+\section{Model Counting with DPLL (3 Points)}
+
+How would you modify the DPLL algorithm to count the number of satisfying assignments of a given formula instead of just deciding satisfiability?
+
 
 \newcommand{\statetilled}{T}
 \newcommand{\statetobetilled}{$+$}
 \newcommand{\statenottobetilled}{$-$}
-\section{Competition: SDVSTP (8(+8) Points)}
+\section{Stardew Valley Soil Tilling Problem (8(+7) Points)}
 
 Consider the well-known and industrially relevant \textit{Stardew Valley Soil Tilling Problem} (SDVSTP), which we also talked about (in a slightly simpler form) in the 0th exercise.
 \\
@@ -82,7 +104,7 @@ The solver should output a line ``\texttt{s SOLUTION k}'', where $k$ is the mini
 \end{figure}
 
 You get 8 points for a correct SDVSTP solver that is able to solve easy instances within a few minutes.
-The best performing solution is awarded double the points.
+The overall most convincing submission(s) get(s) up to \highl{seven bonus points}.
 
 \vspace*{3mm}
 \noindent
@@ -90,83 +112,5 @@ The best performing solution is awarded double the points.
 \noindent
 \textbf{Some benchmark instances:} \url{https://github.com/satlecture/kit2025/tree/main/exercises/sdvstp}
 
-\newpage
-
-\section{CDCL (3+6 Points)}
-\subsection{a)}
-Simulate the CDCL algorithm by hand on the formula F. Select branching literals in the order $x_1,x_2,x_3, ...$. Draw the implication graph once a conflict occurs, learn the 1-UIP clause and continue CDCL search with the variable implied by the asserting learned clause. If everything goes right you should only encounter a single conflict before arriving a satisfying assignment. To emphasize the structure, each variable $x_i$ is just written as~$i$ and it's negation $\bar x_i$ as $-i$. So for example, $\bar x_4$ is written as $-4$ and $x_8$ as 8.
-\begin{align}
-	F = \{\{-1,-2,-4\}, \{-3, 6\}, \{-5,-6, 8\}, \{4,-8,10\}, \\ \{7,9\}, \{-2, -8, 9\}, \{-1,-9-10\},  \{-5,8,9\}\}
-\end{align}
-
-\subsection{b)}
-Repeat the CDCL algorithm, now for the larger formula $F'$. Again, select branching literals again in the order $x_1,x_2,x_3, ...$. Draw the implication graph at every conflict and give the learned 1-UIP clause. Provide the final assignment.
-\begin{align}
-	\centering
-	F' = &\{\{1, 13\}, \{-1, -2, 14\}, \{3, 15\}, \{4, 16\},\{-5, -3, 6\},  \notag \\
-	\quad & \{-5, -7\}, \{-6, 7, 8\}, \{-4, -8, -9\}, \{-1, 9, -10\},\notag \\
-	\quad & \{9, 11, -14\}, \{10, -11, 12\}, \{-2, -11, -12\}\}
-\end{align}
-
-
-
-
-
-
-\section{Competition: Autarkies ($7 (+7)$ Points)}
-Write an anytime algorithm that computes a maximal autarky for a given formula, i.e., an autarky that satisfies as many clauses as possible.
-The tool should accept a DIMACS file path as input and, as soon as possible, output a set of literals representing an autarky. 
-Then, it should output improved sets iteratively.
-For each autarky, use a single line that begins with "v~" and ends with a zero, with space-separated literals of the autarky in between. This format is similar to the SAT Competition Solution Output Format [1].\\
-
-\noindent
-We will run your submission on DIMACS files and evaluate the quality of the solutions found within a set time limit.
-We will stop each run after $k$ minutes.
-Then, we will check the last output line to see if it contains a valid autarky and compute the number of clauses satisfied by the autarky.
-The solution that finds the best autarkies on average will win the competition.\\
-
-\noindent
-[1] \textbf{Output Format:} \url{https://satcompetition.github.io/2025/output.html}
-
-
-\section{Variable Elimination ($3$ Points)}
-For a gate encoding $E$ with output $x$ in a formula $F = E \cup R$,
-we simplified the resolvents $(E_x \cup R_x) \otimes (E_{\overline x} \cup R_{\overline x})$ by
-$S := (E_x \otimes R_{\overline x}) \cup (R_x \otimes E_{\overline x})$, dropping both
-$R_x \otimes R_{\overline x}$ and $E_x \otimes E_{\overline x}$.
-Show that the clauses in $R_x \otimes R_{\overline x}$ can be derived from $S$ by resolution.
-You can assume that $E$ encodes a binary AND gate.
-
-
-\section{Variable Elimination ($2 \times 2$ Points)}
-Let the formula $S$ with gate encodings $E_1$ and $E_2$ be given.
-Apply variable elimination for gates for variables $a$ and $r$.
-Give the clause sets after each elimination step.
-Try the following two strategies.
-
-\begin{enumerate}\setlength{\itemsep}{0pt}
-\item Eliminate variable $a$ first, and then $r$ if possible.
-\item Eliminate variable $r$ first, and then $a$ if possible.
-\end{enumerate}
-\vspace*{-1ex}
-\begin{align*}
-S = \bigl\{ \underbrace{\{ \lnot x, \lnot y, a \}, \{ x, \lnot a \}, \{ y, \lnot a \}}_{E_1},
-\underbrace{\{ \lnot a, r \}, \{ \lnot z, r \}, \{ a, z, \lnot r \}}_{E_2}, \{ a, z, r \},
-\{ \lnot a, \lnot r \} \bigr\}
-\end{align*}
-
-
-\section{Blocked Clauses ($3\times 3$ Points)}
-If Blocked Clause Elimination (BCE) reduces a formula $F$ to the empty formula then $F$ is called a blocked set.
-Prove the following statements.
-
-\begin{enumerate}\setlength{\itemsep}{0pt}
-	\item Any formula $F$ can be partitioned into two blocked sets $S$ and $L$ such that $F = S\cup L$.
-    Design a linear algorithm that produces $L$ and $S$ from $F$.
-	\item Blocked sets are not closed unter resolution. 
-    If $F$ is a blocked set then $F \cup C_1 \otimes C_2$, where $C_1,C_2 \in F$ may not be a blocked set anymore.
-	\item Blocked sets are not closed unter partially assigning variables.
-    If $F$ is a blocked set then $F_{x=v}$ (the result of assigning $v$ to $x$ and subsequent simplification) may not be a blocked set anymore.
-\end{enumerate}
 
 \end{document}
