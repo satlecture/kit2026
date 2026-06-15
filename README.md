@@ -23,6 +23,7 @@ See also [the page from last year](https://github.com/satlecture/kit2025).
 * **Monday, May 18**: [L5 - Application Highlights II (from slide 14)](slides/l04-application-highlights-1.pdf) _[DS]_
 * **Monday, June 1**: [L6 - Elementary SAT Solving Heuristics, Conflict-Driven Clause Learning](slides/l06-heuristics-cdcl.pdf) _[AI]_
 * **Monday, June 8**: [L7 - Conflict-Driven Clause Learning](slides/l07-cdcl.pdf) _[AI]_
+* **Monday, June 15**: [L8 - Preprocessing](slides/l08-preprocessing.pdf) _[AI]_
 
 ## Exercises
 
