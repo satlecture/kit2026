@@ -17,7 +17,7 @@
 \input{../slides/l00-commands.tex}
 
 \begin{document}
-\exhead{4}{2024-06-17}{2024-07-01}
+\exhead{4}{2026-06-16}{2026-06-30}
 
 \newcommand{\statetilled}{T}
 \newcommand{\statetobetilled}{$+$}
@@ -25,41 +25,14 @@
 
 
 
-
-
-
-\section{Competition: Autarkies ($7 (+7)$ Points)}
-Write an anytime algorithm that computes a maximal autarky for a given formula, i.e., an autarky that satisfies as many clauses as possible.
-The tool should accept a DIMACS file path as input and, as soon as possible, output a set of literals representing an autarky. 
-Then, it should output improved sets iteratively.
-For each autarky, use a single line that begins with "v~" and ends with a zero, with space-separated literals of the autarky in between. This format is similar to the SAT Competition Solution Output Format [1].\\
-
-\noindent
-We will run your submission on DIMACS files and evaluate the quality of the solutions found within a set time limit.
-We will stop each run after $k$ minutes.
-Then, we will check the last output line to see if it contains a valid autarky and compute the number of clauses satisfied by the autarky.
-The solution that finds the best autarkies on average will win the competition.\\
-
-\noindent
-[1] \textbf{Output Format:} \url{https://satcompetition.github.io/2025/output.html}
-
-
-\section{Variable Elimination ($3$ Points)}
-For a gate encoding $E$ with output $x$ in a formula $F = E \cup R$,
-we simplified the resolvents $(E_x \cup R_x) \otimes (E_{\overline x} \cup R_{\overline x})$ by
-$S := (E_x \otimes R_{\overline x}) \cup (R_x \otimes E_{\overline x})$, dropping both
-$R_x \otimes R_{\overline x}$ and $E_x \otimes E_{\overline x}$.
-Show that the clauses in $R_x \otimes R_{\overline x}$ can be derived from $S$ by resolution.
-You can assume that $E$ encodes a binary AND gate.
-
-
 \section{Variable Elimination ($2 \times 2$ Points)}
+
 Let the formula $S$ with gate encodings $E_1$ and $E_2$ be given.
 Apply variable elimination for gates for variables $a$ and $r$.
 Give the clause sets after each elimination step.
 Try the following two strategies.
 
-\begin{enumerate}\setlength{\itemsep}{0pt}
+\begin{enumerate}\setlength{\itemsep}{1ex}
 \item Eliminate variable $a$ first, and then $r$ if possible.
 \item Eliminate variable $r$ first, and then $a$ if possible.
 \end{enumerate}
@@ -71,11 +44,22 @@ S = \bigl\{ \underbrace{\{ \lnot x, \lnot y, a \}, \{ x, \lnot a \}, \{ y, \lnot
 \end{align*}
 
 
+\section{Variable Elimination with Gate Encodings ($3$ Points)}
+
+For a gate encoding $E$ with output $x$ in a formula $F = E \cup R$,
+we simplified the resolvents $(E_x \cup R_x) \otimes (E_{\overline x} \cup R_{\overline x})$ by
+$S := (E_x \otimes R_{\overline x}) \cup (R_x \otimes E_{\overline x})$, dropping both
+$R_x \otimes R_{\overline x}$ and $E_x \otimes E_{\overline x}$.
+Show that the clauses in $R_x \otimes R_{\overline x}$ can be derived from $S$ by resolution.
+You can assume that $E$ encodes a binary AND gate.
+
+
 \section{Blocked Clauses ($3\times 3$ Points)}
+
 If Blocked Clause Elimination (BCE) reduces a formula $F$ to the empty formula then $F$ is called a blocked set.
 Prove the following statements.
 
-\begin{enumerate}\setlength{\itemsep}{0pt}
+\begin{enumerate}\setlength{\itemsep}{1ex}
 	\item Any formula $F$ can be partitioned into two blocked sets $S$ and $L$ such that $F = S\cup L$.
     Design a linear algorithm that produces $L$ and $S$ from $F$.
 	\item Blocked sets are not closed unter resolution. 
@@ -85,65 +69,61 @@ Prove the following statements.
 \end{enumerate}
 
 
-\section{Competition: Clause Sharing Selection Heuristic ($3 (+7)$ Points)}
+\section{Covered Clauses ($3$ Points)}
 
-Manipulate Mallob's clause sharing by modifying the class \texttt{ClausePrefilter} (see below), whose method \texttt{prefilterClause} is called whenever a solver thread produces a clause that passes a number of basic checks.
-The method can return \texttt{false} to completely drop a clause;
-if the method returns \texttt{true}, the calling solver thread will subsequently attempt to write the clause to an export buffer.
-You can change a (non unit) clause's priority by manipulating its LBD value to make it more or less likely that a clause ``survives'' subsequent selection stages and is shared successfully.
-For a clause of length $\ell \geq 2$, LBD values of 2 (``best'') through $\ell$ (``worst'') are valid.
-If needed, you may perform precomputations and access the formula in the body of \texttt{notifyFormula($\cdot$)}.
-\\[1em]
-You get 3 points for submitting a functional version of \texttt{clause\_prefilter.hpp} with some non-trivial change.
-The submissions that result in the best performance with a Kissat portfolio at 64 cores on diverse benchmarks get up to 7/5/3 additional points.
-We will, in particular, set the non-default parameters \texttt{-lbdpi=1 -lbdpo=1 -pbbm=1} to consistently prioritize clauses by ``LBD'' first and by clause length second (i.e., as a tiebreaker only) and \texttt{-rlbd=1 -ilbd=0} to reset each incoming clause's LBD value to $\ell$ before a solver thread imports it.
-\\[1em]
-\textbf{Mallob version to use:} \url{https://github.com/domschrei/mallob/tree/experimental}
-\\
---- \texttt{ClausePrefilter}: see \texttt{src/app/sat/sharing/filter/clause\_prefilter.hpp}
-\\[1em]
-Contact Dominik $\langle$\href{mailto:dominik.schreiber@kit.edu}{dominik.schreiber@kit.edu}$\rangle$ in case of technical questions or issues.
+Let $F$ be a formula and $C \in F$ a clause. 
+A literal $l \not\in C$ is called a \emph{covered literal} of $C$ if every non-tautological resolvent of $C$ with a clause in $F$ contains $l$.
+The clause $C$ is called \emph{covered} if it becomes blocked in $F$ after adding any of its covered literals.
+Prove that adding a covered literal to a clause does not change the satisfiability of the formula.
 
-%\section{Competition: Preprocessing before Parallel Solving}
 
-%For this exercise we consider Mallob's SATWITHPRE mode of execution, where a dedicated preprocessor is run while all of the parallel cores already perform parallel SAT solving on the non-preprocessed formula.
-%Modify the preprocessor by preprocessing methods to your liking.
 
-\section{Parallel Resolution ($3+3$ Points)}
+\section{Competition: SDVSTPP ($10 (+10)$ Points)}
+As an extension of the slightly unrealistic SDVSTP (Assignment 2), we introduce the much more precise \emph{Stardew Valley Soil Tilling Planning Problem} (SDVSTPP).
+The difference between SDVSTP and SDVSTPP is that the latter now features discrete \emph{time steps} as well as a \emph{player}.
+At any given point in time, the player is positioned at exactly one of the grid cells.
+At each time step, the player performs one out of two possible kinds of actions:
 
-Consider a parallel setup with $p$ resolution procedures in a ``bulk synchronous parallel'' (BSP) model:
-Each procedure performs a single resolution step; then, all resolvents are shared across all procedures. This is repeated until the empty clause is found.
-\begin{itemize}
-	\item[(a)] Provide an unsatisfiable CNF formula where the above setup \emph{can} speed up the derivation of the empty clause by a factor of $p / \log{p}$ (or better) compared to the shortest sequential resolution order.
-	\item[(b)] Provide an unsatisfiable CNF formula where the derivation of the empty clause can only ever be sped up by a factor of $1 + \varepsilon$ (where $0 \leq \varepsilon \ll 1$) compared to the shortest sequential resolution order.
-\end{itemize}
-
-\section{VBS and Speedups ($4+6$ Points)}
-
-Analyze the results of the 2024 SAT Competition.
-\begin{itemize}
-	\item[(a)] Compute a VBS of all sequential main track solvers.
-	Compare its performance to the best cloud track solver in the competition.
-	Interpret the results, also considering any peculiar instance families.
-	\item[(b)] Compute the geometric mean and median speedup of each parallel track solver relative to the best performing sequential solver \texttt{kissat-sc2024}, only considering instances which both the sequential solver \emph{and} the parallel solver were able to solve.
-	Then do the same while considering \textit{all} instances solved by the parallel solver -- ``generously'' attributing a running time of 5\,000\,s to each such instance that the sequential solver did not solve.
-	Interpret and compare the results.
-\end{itemize}
+\begin{enumerate}\setlength{\itemsep}{1ex}
+\item \emph{walk} to one of the up to four adjacent tiles,
+\item perform some tilling action at one of the up to four adjacent tiles.
+\end{enumerate}
 
 \noindent
-\textbf{Competition results:} \url{https://satcompetition.github.io/2024/downloads/detailed_results.zip}\\
-\textbf{Benchmark meta data:}
-\url{https://satcompetition.github.io/2024/downloads/meta.csv}
+The tilling action's orientation is decided by the player position.
+Figure~\ref{fig:sdvstp-player} shows all potentially valid operations for each of the five patterns, where the black square is the player's location.\\[1em]
 
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=11cm]{figures/sdvstp-player.pdf}
+	\caption{The five tilling patterns and their valid orientations.}
+	\label{fig:sdvstp-player}
+\end{figure}
 
-\section{Clause Filtering in Distributed SAT ($5$ Points)}
+\noindent
+Your task is to write an \textit{optimal SAT-based SDVSTPP planner}.
+The planner application takes an \texttt{.sdvstp} file (just like the SDVSTP solver in Assignment 2) and assumes that the player is initially located at the \emph{top left position}, i.e., at the first cell character read from the \texttt{.sdvstp} file.
+The planner should output the shortest possible plan in terms of time steps (i.e., player actions) that results in a grid state where tiles are tilled exactly according to the input specification (as in SDVSTP).\\[1em]
 
-Distributed clause-sharing solvers like \textsc{MallobSat} filter a repeated clause based on \textit{exact syntactical equivalence} (i.e., if a clause $c$ is shared successfully, then clause $c$ will be blocked for some period).
-Find a way to generalize this approach to \textit{subsumed} clauses, i.e., if clause $c$ is shared, then all clauses $c' \supseteq c$ are blocked for some period.
-Provide a rough analysis of the running time complexity and the memory footprint of your approach.
+\noindent
+As shown in Figure~\ref{fig:sdvstpp-solution}, the plan should be output as a single line beginning with ``\texttt{s }'', where \texttt{U}/\texttt{D}/\texttt{L}/\texttt{R} corresponds to up/down/left/right movement and where \texttt{u}/\texttt{d}/\texttt{l}/\texttt{r} followed by \texttt{1}/\texttt{2}/\texttt{3}/\texttt{4}/\texttt{5} corresponds to tilling action 1--5 in up/down/left/right direction, respectively.
 
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=6.5cm]{figures/sdvstpp-solution.pdf}
+	\caption{An example of an optimal SDVSTPP plan.}
+	\label{fig:sdvstpp-solution}
+\end{figure}
 
+\noindent
+You receive 10 points for an optimal planner solving easy inputs and up to 10 bonus points for solving more difficult inputs.
 
+\vspace*{3mm}
+\noindent
+\textbf{Code skeleton:} \url{https://github.com/satlecture/kit2025/blob/main/code/src/sdvstp/sdvstpp.cc}
+\\[1ex]
+\noindent
+\textbf{Some benchmark instances:} \url{https://github.com/satlecture/kit2025/tree/main/exercises/sdvstp}
 
 
 \end{document}
