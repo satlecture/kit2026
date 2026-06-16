@@ -34,7 +34,7 @@ See also [the page from last year](https://github.com/satlecture/kit2025).
 
 ## Competition Results
 * E1 [Graph-Coloring](exercises/competitions/ex1-coloring.pdf) [NRL]
-* E2 [Local Search](ex2-localsearch.pdf) [NRL]
+* E2 [Local Search](exercises/competitions/ex2-localsearch.pdf) [NRL]
  
 
 ## Code
