@@ -208,7 +208,7 @@ Given clause $C = \{ a_1, a_2, \ldots, a_k \}$. Sequentially assign $\overline a
     \end{itemize}
     \item \highlo{for some $a \in C \setminus P, a$ is propagated false}: $a$ can never help satisfy $C$ in this context.
     \begin{itemize}\normalsize\setlength{\itemsep}{5pt}
-        \item[] \only<7>{\highlow{What can we do in this case?}}\onslide<8->{$\Rightarrow$ \textbf{Literal elimination:} remove $a$ and continue.}
+        \item[] \only<7>{\highlow{What can we do in this case?}}\onslide<8->{$\Rightarrow$ \textbf{Literal elimination:} remove $a$ from $C$ and continue.}
         \item[] \only<8>{\highlow{Why is that sound?}}\onslide<9->{$\overline P \subseteq \overline{C \setminus \{a\}}$ gives $F \setminus C \land \overline{C \setminus \{a\}} \vdash_{\mathit{UP}} \overline a$, the ALE condition $\Rightarrow F \setminus C \models C \setminus \{a\}$.}
     \end{itemize}
 \end{itemize}
