@@ -149,7 +149,7 @@ $F$ can not have a model which satisfies $\{a, c, d\}$, but not $\{a, d\}$.
 \begin{frame}{Propagation-based Redundancy Notions}
 Let a formula $F$, a clause $C \in F$, and a literal $x \in C$ be given.\\[1ex]
 \begin{block}{Asymmetric Tautology Elimination (ATE)}
-If $F \setminus C \land \overline C \vdash_{\mathop{UP}} \bot$, then $F \models C$.\\[1ex]
+If $F \setminus C \land \overline C \vdash_{\mathop{UP}} \bot$, then $F \setminus C \models C$.\\[1ex]
 $\implies$ remove $C$ from $F$
 \end{block}~\\
 \only<1>{\highlow{Does that remind you of something?}}
@@ -194,22 +194,22 @@ $\{a,c,d\}$ follows from the other clauses in $F$.
 \begin{frame}{Vivification}
 \vspace*{-1em}
 Given clause $C = (a_1 \lor a_2 \lor \cdots \lor a_k)$. Sequentially assign $\lnot a_1, \lnot a_2, \ldots$ and propagate over $F \setminus \{C\}$.\\[1ex]
-\begin{block}{What can happen after assigning $P := \{\lnot a_1, \ldots, \lnot a_{i \leq k}\}$ and propagating?}
+\begin{block}{What can happen after assigning $P := \{ a_1, \ldots, a_{i \leq k}\}$ and propagating $\overline P$?}
 \begin{itemize}\setlength{\itemsep}{1em}
     \item \highlo{Conflict $(\bot)$}: the negated prefix $\overline P$ is contradictory w.r.t.\ $F \setminus \{C\}$.
     \begin{itemize}\normalsize\setlength{\itemsep}{5pt}
         \item[] \only<1>{\highlow{What can we do in this case?}}\onslide<2->{$\Rightarrow$ \textbf{Clause elimination:} remove $C$.}
-        \item[] \only<2>{\highlow{Why is that sound?}}\onslide<3->{$\overline P \subseteq \overline{C}$ gives $F \setminus C \land \overline{C} \vdash_{\mathit{UP}} \bot$, the ATE condition $\Rightarrow F \models C$.}
+        \item[] \only<2>{\highlow{Why is that sound?}}\onslide<3->{$\overline P \subseteq \overline{C}$ gives $F \setminus C \land \overline{C} \vdash_{\mathit{UP}} \bot$, the ATE condition $\Rightarrow F \setminus C \models C$.}
     \end{itemize}
-    \item \highlo{for some $a \in C \setminus P, a$ is propagated true}: $\overline P \vdash_{\mathit{UP}} a$.
+    \item \highlo{for some $a \in C \setminus P, a$ is propagated true}: $F \setminus C \land \overline P \vdash_{\mathit{UP}} a$.
     \begin{itemize}\normalsize\setlength{\itemsep}{5pt}
         \item[] \only<4>{\highlow{What can we do in this case?}}\onslide<5->{$\Rightarrow$ \textbf{Clause truncation:} drop all unprocessed literals $C \setminus (P \cup \{a\})$.}
-        \item[] \only<5>{\highlow{Why is that sound?}}\onslide<6->{$F \models \overline P \rightarrow a$, so $P \cup \{a\}$ already \emph{subsumes} $C$.}
+        \item[] \only<5>{\highlow{Why is that sound?}}\onslide<6->{$F \setminus C \models \overline P \rightarrow a$, so $P \cup \{a\}$ already \emph{subsumes} $C$.}
     \end{itemize}
     \item \highlo{for some $a \in C \setminus P, a$ is propagated false}: $a$ can never help satisfy $C$ in this context.
     \begin{itemize}\normalsize\setlength{\itemsep}{5pt}
         \item[] \only<7>{\highlow{What can we do in this case?}}\onslide<8->{$\Rightarrow$ \textbf{Literal elimination:} remove $a$ and continue.}
-        \item[] \only<8>{\highlow{Why is that sound?}}\onslide<9->{$\overline P \subseteq \overline{C \setminus \{a\}}$ gives $F \setminus C \land \overline{C \setminus \{a\}} \vdash_{\mathit{UP}} \lnot a$, the ALE condition $\Rightarrow F \models C \setminus \{a\}$.}
+        \item[] \only<8>{\highlow{Why is that sound?}}\onslide<9->{$\overline P \subseteq \overline{C \setminus \{a\}}$ gives $F \setminus C \land \overline{C \setminus \{a\}} \vdash_{\mathit{UP}} \lnot a$, the ALE condition $\Rightarrow F \setminus C \models C \setminus \{a\}$.}
     \end{itemize}
 \end{itemize}
 \end{block}
