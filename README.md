@@ -25,6 +25,7 @@ See also [the page from last year](https://github.com/satlecture/kit2025).
 * **Monday, June 8**: [L7 - Conflict-Driven Clause Learning](slides/l07-cdcl.pdf) _[AI]_
 * **Monday, June 15**: [L8 - Preprocessing](slides/l08-preprocessing.pdf) _[AI]_
 * **Monday, June 22**: [L9 - Redundancy Notions and Proof Systems](slides/l09-redundancy-proofs.pdf) _[AI]_
+* **Monday, June 29**: [L10 - Parallel SAT Solving](slides/l10-parallel.pdf) _[DS]_
 
 ## Exercises
 
