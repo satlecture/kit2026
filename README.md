@@ -31,9 +31,11 @@ See also [the page from last year](https://github.com/satlecture/kit2025).
 
 * **Tuesday, May 5**: E1 - Getting Started, [Release of Exercise Sheet 1 (Introduction, Encodings)](exercises/ex1.pdf) _[AI]_
 * **Tuesday, May 19**: E2 - Discussing Exercise Sheet 1 (Introduction, Encodings), [Release of Exercise Sheet 2 (Applications, Local search)](exercises/ex2.pdf) _[DS]_
-* **Tuesday, June 2**: E3 - Discussing Exercise Sheet 2 (Applications, Local Search), [Release of Exercise Sheet 3 (Resolution, CDCL, SDVSTP)](exercises/ex3.pdf) _[AI]_
-* **Tuesday, June 16**: E4 - Discussing Exercise Sheet 3 (CDCL, MC-DPLL), [Release of Exercise Sheet 4 (Preprocessing, SDVSTPP)](exercises/ex4.pdf) _[NRL]_
-* **Tuesday, June 30**: E5 - Discussing Exercise Sheet 4 (Preprocessing) and 3 (SDVSTP), [Release of Exercise Sheet 5 (Parallel SAT)](exercises/ex5.pdf) _[NRL+DS]_
+* **Tuesday, June 2**: E3 - Discussing Exercise Sheet 2 (Applications) and 1 (Graph Coloring competition), [Release of Exercise Sheet 3 (Resolution, CDCL, SDVSTP)](exercises/ex3.pdf) _[AI]_
+* **Tuesday, June 16**: E4 - Discussing Exercise Sheet 3 (CDCL, MC-DPLL) and 2 (Local Search competition), [Release of Exercise Sheet 4 (Preprocessing, SDVSTPP)](exercises/ex4.pdf) _[NRL]_
+* **Tuesday, June 30**: E5 - Discussing Exercise Sheet 4 (Preprocessing) and 3 (SDVSTP competition), [Release of Exercise Sheet 5 (Parallel SAT)](exercises/ex5.pdf) _[NRL+DS]_
+* Tuesday, July 14: E6 - Discussing Exercise Sheet 5 (Parallel SAT) and 4 (SDVSTPP competition), Release of Exercise Sheet 6
+* Tuesday, July 28: E7 - Discussing Exercise Sheet 6, Exam questions
 
 ## Competition Results
 * E1 [Graph-Coloring](exercises/competitions/ex1-coloring.pdf) [NRL]
