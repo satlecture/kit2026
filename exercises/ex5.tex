@@ -17,9 +17,10 @@
 \input{../slides/l00-commands.tex}
 
 \begin{document}
-\exhead{5}{2024-07-01}{2024-07-15}
+\exhead{5}{2026-06-30}{2024-07-14}
 
 
+\iffalse
 \section{Competition: Autarkies ($7 (+7)$ Points)}
 Write an anytime algorithm that computes a maximal autarky for a given formula, i.e., an autarky that satisfies as many clauses as possible.
 The tool should accept a DIMACS file path as input and, as soon as possible, output a set of literals representing an autarky. 
@@ -34,6 +35,7 @@ The solution that finds the best autarkies on average will win the competition.\
 
 \noindent
 [1] \textbf{Output Format:} \url{https://satcompetition.github.io/2025/output.html}
+\fi
 
 \section{Parallel Resolution ($3+3$ Points)}
 
@@ -79,14 +81,14 @@ For a clause of length $\ell \geq 2$, LBD values of 2 (``best'') through $\ell$ 
 If needed, you may perform precomputations and access the formula in the body of \texttt{notifyFormula($\cdot$)}.
 \\[1em]
 You get 3 points for submitting a functional version of \texttt{clause\_prefilter.hpp} with some non-trivial change.
-The submissions that result in the best performance with a Kissat portfolio at 64 cores on diverse benchmarks get up to 7/5/3 additional points.
+The submissions that result in the best performance with a Kissat portfolio at 32 cores on diverse benchmarks get up to 7 additional points.
 We will, in particular, set the non-default parameters \texttt{-lbdpi=1 -lbdpo=1 -pbbm=1} to consistently prioritize clauses by ``LBD'' first and by clause length second (i.e., as a tiebreaker only) and \texttt{-rlbd=1 -ilbd=0} to reset each incoming clause's LBD value to $\ell$ before a solver thread imports it.
 \\[1em]
-\textbf{Mallob version to use:} \url{https://github.com/domschrei/mallob/tree/experimental}
+\textbf{Mallob version to use:} \url{https://github.com/domschrei/mallob/tree/fullcmake}
 \\
 --- \texttt{ClausePrefilter}: see \texttt{src/app/sat/sharing/filter/clause\_prefilter.hpp}
-\\[1em]
-Contact Dominik $\langle$\href{mailto:dominik.schreiber@kit.edu}{dominik.schreiber@kit.edu}$\rangle$ in case of technical questions or issues.
+%\\[1em]
+%Contact Dominik $\langle$\href{mailto:dominik.schreiber@kit.edu}{dominik.schreiber@kit.edu}$\rangle$ in case of technical questions or issues.
 
 %\section{Competition: Preprocessing before Parallel Solving}
 
@@ -94,6 +96,8 @@ Contact Dominik $\langle$\href{mailto:dominik.schreiber@kit.edu}{dominik.schreib
 %Modify the preprocessor by preprocessing methods to your liking.
 
 
+
+\iffalse
 
 
 \section{Correctness of RAT ($4$ Points)}
@@ -111,5 +115,7 @@ Let $F$ be a CNF formula and $c$ be a RAT clause for $F$ w.r.t.~some literal $x 
 	Devise an algorithm that takes $F$ and $P$ and outputs a proof $P'$ for $F$ with (typically) fewer clause additions.
 	\\\textbf{Hint:} Parallel CDCL solver threads may produce similar sets of clauses (especially at the beginning).
 \end{itemize}
+
+\fi
 
 \end{document}
