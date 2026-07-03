@@ -40,7 +40,7 @@ See also [the page from last year](https://github.com/satlecture/kit2025).
 ## Competition Results
 * E1 [Graph-Coloring](exercises/competitions/ex1-coloring.pdf) [NRL]
 * E2 [Local Search](exercises/competitions/ex2-localsearch.pdf) [NRL]
-* E3 [SDVSTP](exercises/competitions/sheet3-sdvstp-withkarl3.pdf) [NRL]  (Updated 03.07.2026)
+* E3 [SDVSTP](exercises/competitions/sheet3-sdvstp-withkarl3.pdf) [NRL]  (updated 03.07.2026)
  
 
 ## Code
