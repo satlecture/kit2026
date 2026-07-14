@@ -100,22 +100,6 @@ We will, in particular, set the non-default parameters \texttt{-lbdpi=1 -lbdpo=1
 \iffalse
 
 
-\section{Correctness of RAT ($4$ Points)}
-Let $F$ be a CNF formula and $c$ be a RAT clause for $F$ w.r.t.~some literal $x \in c$.
-\\Show that $F \cup \{c\}$ is satisfiability-equivalent to $F$, i.e., $F \cup \{c\}$ is satisfiable if and only if $F$ is satisfiable.
-
-
-
-\section{LRUP Algorithms ($3+3+3$ Points)}
-\begin{itemize}
-	\item[(a)] Extend the conflict analysis of CDCL to efficiently produce LRUP dependency information (``hints'').
-	\item[(b)] Given a CNF formula $F$ and an LRUP proof of unsatisfiability $P$ for $F$, devise an algorithm using $P$ that finds an \emph{unsatisfiable core} of $F$, i.e., a subset of clauses in $F$ that is unsatisfiable.
-	The algorithm can perform a single, linear pass over $P$ (in whichever direction) and cannot keep the entire proof in memory.
-	\item[(c)] Consider a CNF formula $F$ and an LRUP proof of unsatisfiability $P$ produced by a parallel clause-sharing solver as in the work by Michaelson et al.~(2023, 2025).
-	Devise an algorithm that takes $F$ and $P$ and outputs a proof $P'$ for $F$ with (typically) fewer clause additions.
-	\\\textbf{Hint:} Parallel CDCL solver threads may produce similar sets of clauses (especially at the beginning).
-\end{itemize}
-
 \fi
 
 \end{document}
