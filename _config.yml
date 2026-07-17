@@ -1,0 +1,4 @@
+# GitHub Pages / Jekyll configuration
+title: Lecture: Practical SAT Solving
+description: The lecture provides a friendly and practical overview of propositional satisfiability (SAT) solving, covering its theoretical background, important algorithms and techniques, parallelization, proofs, applications, and related tools (MaxSAT, SMT). No particular prior knowledge beyond basic foundations of computer science is required.
+theme: jekyll-theme-primer
