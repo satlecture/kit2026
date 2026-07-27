@@ -87,62 +87,33 @@ Today's lecture is based on the slides by Prof. Matti J\"{a}rvisalo presented at
 \begin{frame}{Boolean Optimization}{Motivation}
 Most real-world problems involve an optimization component. There is a high demand for automated approaches to finding good solutions to computationally hard optimization problems.\\[1ex]
 \begin{block}{Examples}
-\begin{itemize}\itemsep1em
+\begin{itemize}\itemsep1ex
 	\item Find a shortest path/plan/execution to a goal/error state: \emph{Planning, model checking, debugging, \dots}
 	\item Find a smallest explanation: \emph{Explainable machine learning, \dots}
 	\item Find a least resource-consuming schedule: \emph{Scheduling, logistics, \dots}
+	\item Find an optimal swap cycle in a kidney exchange: \emph{Healthcare}
 \end{itemize}
 \end{block}
-\begin{block}{Benefits of provably optimal solutions}
-\begin{itemize}\itemsep1em
-  \item Resource savings: Time, Workforce, Energy, Material, \dots
-  \item Accuracy
-  \item Better approximations by optimally solving simplified problem representations
-\end{itemize}
-\end{block}
-\textbf{Key Challenge:} Scalability of exactly solving instances of NP-hard optimization problems
-\end{frame}
-
-\begin{frame}{Generic Linear Optimization Paradigms}
-\vspace{-2em}
-\emph{Given a conjunction of constraints} of the form $\sum\limits_{i=1}^n c_i x_i \leq b$ (with constant coefficients $c_i$ and bound $b$),\\
-\emph{find an assignment} to the variables $x_i$ that satisfies all constraints\\
-\emph{and that maximizes} the objective function $\sum\limits_{i=1}^n d_i x_i$ (with constant coefficients $d_i$).~\\[1em]
-\begin{block}{Constrained Optimization Paradigms}
-\begin{itemize}\itemsep1em
-	\item Integer-Linear Programming (ILP)
-	\begin{itemize}\itemsep1ex
-		\item Variables $x_i$, Coefficients $c_i, d_i$, and Bounds $b$ are Integers
-		\item Algorithms: e.g. Branch-and-Cut with Simplex
-	\end{itemize}
-	\item Pseudo-Boolean Optimization (PBO)
-	\begin{itemize}\itemsep1ex
-		\item Variables $x_i$ are Boolean, Coefficients $c_i, d_i$, and Bound $b$ are Integers
-		\item Algorithms: e.g. CDCL-based
-	\end{itemize}
-	\item Maximum Satisfiability (MaxSAT)
-	\begin{itemize}\itemsep1ex
-		\item Variables $x_i$ are Boolean, Coefficients $c_i, d_i \in \{-1, 0, 1\}$, Bound $b=-1$
-		\item Algorithms: e.g. CDCL-based
-	\end{itemize}
+\begin{block}{Benefits}
+\begin{itemize}\itemsep1ex
+	\item Resource savings (time, workforce, energy, material, \dots)
+	\item Life savings (e.g., in healthcare, disaster response, \dots)
+	\item Accuracy and proofs of optimality
+	\item Better approximations by optimally solving simplified problem representations
 \end{itemize}
 \end{block}
 \end{frame}
 
-\begin{frame}{MaxSAT: Classic Definition and Terminology}
-\vspace{-2em}
-\begin{itemize}
-	\item \textbf{Input:} CNF formula $F$ (set of clauses)
-	\item \textbf{Task:} Find an assignment $\tau$ that maximizes the number of satisfied clauses
-\end{itemize}~\\
+\begin{frame}{MaxSAT}{Classic Definition and Terminology}
+\textbf{Input:} CNF formula $F$ (set of clauses)\\
+\textbf{Task:} Find an assignment $\tau$ that maximizes the number of satisfied clauses\\[1ex]
 \begin{block}{Central Generalizations}
 \begin{itemize}
 	\item \textbf{Weighted MaxSAT:} Each clause $C$ has a weight $w_C$, and the goal is to maximize the total weight of satisfied clauses.
-	\item \textbf{Partial MaxSAT:} Some clauses are hard (infinite weight); soft clauses can be violated.
+	\item \textbf{Partial MaxSAT:} Some clauses are hard (infinite weight); only soft clauses can be violated.
 	\item \textbf{Weighted Partial MaxSAT:} Mix of hard clauses and weighted soft clauses.
-\end{itemize}~\\
-\textbf{Relationship with Generic Optimization:} Each of these variants can be reencoded such that all soft clauses are unit clauses. Soft unit clauses can then be interpreted as variables in the objective function.
-\end{block}~\\
+\end{itemize}
+\end{block}
 \begin{block}{Terminology}
 \begin{itemize}
 	\item \textbf{Solution:} Assignment satisfying all hard clauses
@@ -152,40 +123,63 @@ Most real-world problems involve an optimization component. There is a high dema
 \end{block}
 \end{frame}
 
+\begin{frame}{Generic Linear Optimization Paradigms}
+\vspace{-2em}
+\textbf{Relationship with Generic Optimization:} Each MaxSAT instance can be reencoded such that all soft clauses are unit clauses. Soft unit clauses can then be interpreted as variables in an objective function of a generic optimization problem.~\\[1em]
+\emph{Given a conjunction of constraints} $\bigwedge_k C_k$ of the form $C_k := \sum\limits_{i=1}^n c_{ki} x_i \leq b_k$ (with coefficients $c_{ki}$ and bound $b_k$),\\
+\emph{find an assignment} to the variables $x_i$ that satisfies all constraints\\
+\emph{and that maximizes} the objective function $\sum\limits_{i=1}^n c_i x_i$ (with coefficients $c_i$).~\\[1em]
+\begin{block}{Constrained Optimization Paradigms}
+\begin{itemize}\itemsep2em
+	\item Maximum Satisfiability (MaxSAT)
+	\begin{itemize}\itemsep1ex
+		\item Variables $x$ are Boolean, Coefficients $c \in \{-1, 0, 1\}$, Bound $b=-1$
+	\end{itemize}
+	\item Pseudo-Boolean Optimization (PBO)
+	\begin{itemize}\itemsep1ex
+		\item Variables $x$ are Boolean, Coefficients $c$, and Bound $b$ are Integers
+	\end{itemize}
+	\item Integer-Linear Programming (ILP)
+	\begin{itemize}\itemsep1ex
+		\item Variables $x$, Coefficients $c$, and Bounds $b$ are Integers
+	\end{itemize}
+\end{itemize}
+\end{block}
+\end{frame}
+
 \begin{frame}{MaxSAT Applications}
 MaxSAT solvers are particularly successful on inherently Boolean problems.\\[1em]
 \begin{itemize}\itemsep1em
-	\item Placement/Routing/Debugging/Verification in Hardware Design
-	\item Planning, Scheduling, Resource Allocation
-	\item Product Configuration
-	\item Software Package Management
-	\item Causal Discovery, Argumentation, Formal XAI
-  	\item Max-Clique
-  	\item \dots and many more!
-\end{itemize}~\\[1ex]
-Central to success: Advances in MaxSAT solver technology.
+	\item \textbf{Hardware Design}: Placement, Routing, Debugging, Verification
+	\item \textbf{Planning, Scheduling, Resource Allocation}
+	\item \textbf{Product Configuration}, \textbf{Dependency Management}, \textbf{Software Package Management}
+	\item \textbf{Causal Reasoning, Argumentation, Formal XAI}
+  	\item \dots 
+\end{itemize}
 \end{frame}
 
-\begin{frame}{Example: Encoding Shortest Paths}
-\begin{itemize}
+\begin{frame}{Toy Example}{Encoding Shortest Paths}
+	\begin{columns}[T]
+		\begin{column}{0.7\textwidth}
+\begin{itemize}\itemsep1ex
   \item Grid-based shortest path problem from $S$ to $G$
   \item Horizontal/vertical moves only; blocked cells not allowed
   \item Not a practical MaxSAT application, but useful for illustration
 \end{itemize}~\\
-\centering
-\includegraphics[width=0.3\textwidth]{figures/l13/example-grid.png}
+\end{column}
+\begin{column}{0.29\textwidth}
+\includegraphics[width=\textwidth]{figures/l13/example-grid.png}
+\end{column}
+\end{columns}
 \end{frame}
 
-\begin{frame}{Example: Encoding Shortest Paths}
-\vspace{-2em}
+\begin{frame}{Toy Example}{Encoding Shortest Paths}
 \begin{columns}[T]
 \begin{column}{0.7\textwidth}
-Basic Encoding Idea:\\[1ex]
+Basic Encoding Idea: One Boolean variable per unblocked square\\[1ex]
 \begin{itemize}\itemsep1ex
-	\item One Boolean variable per unblocked square
 	\item $S$, $G$ must be visited (hard unit clauses)
-	\item All other squares: soft unit clauses (e.g., $\lnot a$)\\
-	with weight 1 (``Prefer not to visit'')
+	\item All other squares: ``Prefer not to visit'' (soft unit clauses with weight 1)
 \end{itemize}~\\
 MaxSAT minimizes the number of visited squares.\\[1ex]
 Without further constraints that formulation only visits $S$ and $G$.
@@ -196,25 +190,20 @@ Without further constraints that formulation only visits $S$ and $G$.
 \end{columns}
 \end{frame}
 
-\begin{frame}{Example: Encoding Shortest Paths}
-\vspace{-2em}
+\begin{frame}{Toy Example}{Encoding Shortest Paths}
 Ensure a valid path between $S$ and $G$.~\\[1em]
 \begin{columns}[T]
 \begin{column}{0.7\textwidth}
 \textbf{Constraint 1:} $S$ and $G$ must have exactly one visited neighbor~\\[1ex]
-\begin{itemize}\itemsep1ex
-	\item For $S$:\\
-	$a + b = 1$\\
-	CNF: $(a \vee b), (\lnot a \vee \lnot b)$
-	\item For $G$:\\
-	$k + q + r = 1$\\
-	CNF: $(k \vee q \vee r), (\lnot k \vee \lnot q), (\lnot k \vee \lnot r), (\lnot q \vee \lnot r)$
-\end{itemize}~\\
+\visible<2->{\begin{itemize}\itemsep1ex
+	\item For $S$: $a + b = 1$ \quad CNF: $\{a, b\}, \{\lnot a, \lnot b\}$
+	\item For $G$: $k + q + r = 1$ \quad CNF: $\{k, q, r\}, \{\lnot k, \lnot q\}, \{\lnot k, \lnot r\}, \{\lnot q, \lnot r\}$
+\end{itemize}~\\}
 \textbf{Constraint 2:} All other visited squares must have exactly two visited neighbors~\\[1ex]
-\begin{itemize}\itemsep1ex
+\visible<2->{\begin{itemize}\itemsep1ex
 	\item Example: for square $e$, if $e$ is visited, then $d + j + l + f = 2$
 	\item Requires encoding a cardinality constraint in CNF
-\end{itemize}
+\end{itemize}}
 \end{column}
 \begin{column}{0.29\textwidth}
 \includegraphics[width=\textwidth]{figures/l13/example-grid.png}
@@ -222,21 +211,23 @@ Ensure a valid path between $S$ and $G$.~\\[1em]
 \end{columns}
 \end{frame}
 
-\begin{frame}{Example: Path Properties}
-Every solution to the hard clauses defines a valid path from $S$ to $G$.~\\[1em]
+\begin{frame}{Toy Example}{Encoding Shortest Paths}
+Path Properties: 
+Every solution to the hard clauses defines a valid path from $S$ to $G$.~\\[1ex]
 \begin{columns}[T]
 \begin{column}{0.7\textwidth}
-\begin{itemize}\itemsep1em
+\begin{itemize}\itemsep1ex
 	\item Each visited square falsifies a soft clause (e.g., $\lnot x$)
 	\item MaxSAT solution is a shortest path (minimum number of visited squares)
-\end{itemize}
-\end{column}
-\begin{column}{0.29\textwidth}
-\includegraphics[width=\textwidth]{figures/l13/example-grid-sol.png}~\\
+\end{itemize}~\\[1em]
+Example: Two valid paths from $S$ to $G$.\\[1ex]
 \begin{itemize}\itemsep1ex
 	\item Orange path: 14 visited squares
 	\item Green path: 8 visited squares (optimal)
 \end{itemize}
+\end{column}
+\begin{column}{0.29\textwidth}
+\includegraphics[width=\textwidth]{figures/l13/example-grid-sol.png}
 \end{column}
 \end{columns}
 \end{frame}
@@ -253,83 +244,72 @@ MaxSAT can represent high-level soft constraints compactly.\\[1em]
 \end{block}
 \end{frame}
 
-\begin{frame}{MaxSAT: Complexity}
-\begin{itemize}\itemsep1em
-  \item \textbf{Decision version:} $\mathcal{NP}$-complete\\[1ex]
-  \begin{itemize}\itemsep1ex
-    \item Given CNF $F$, integer $k$: is there an assignment satisfying at least $k$ clauses?
-  \end{itemize}
-  \item \textbf{Optimization version:} $\mathsf{FP}^{\mathcal{NP}}$-complete\\[1ex]
-  \begin{itemize}\itemsep1ex
-	\item Solvable with a polynomial number of calls to an $\mathcal{NP}$ oracle
-	\item SAT solver acts as the $\mathcal{NP}$ oracle in practice
-    \item Same as TSP: polynomial-time computation using an $\mathcal{NP}$ oracle
-  \end{itemize}
-  \item \textbf{Hard to approximate:} APX-complete\\[1ex]
-  \begin{itemize}\itemsep1ex
-    \item Constant-factor approximation possible
-    \item No poly-time approximation scheme (PTAS) unless $\mathcal{P} = \mathcal{NP}$
-  \end{itemize}
+\begin{frame}{A Glimpse into the Polynomial Hierarchy}
+{Defining complexity beyond $\mathcal{NP}$}
+\begin{blueblock}{Definition: Polynomial Hierarchy (without co-$\mathcal{NP}$)}
+\begin{itemize}\itemsep1ex
+	\item $\Sigma_0^p := \Delta_0^p := \mathcal{P}$
+	\item $\Sigma_{k+1}^p = \mathcal{NP}^{\Sigma_k^p}$ \hfill (nondeterministic poly-time \emph{with} a $\Sigma_k^p$ oracle)
+	\item $\Delta_{k+1}^p = \mathcal{P}^{\Sigma_k^p}$ \hfill (deterministic poly-time \emph{with} a $\Sigma_k^p$ oracle)
+	\item $\mathcal{P} ~\subseteq~ \mathcal{NP} ~\subseteq~ \Delta_2^p ~\subseteq~ \Sigma_2^p ~\subseteq~ \dots ~\subseteq~ \mathrm{PH} ~\subseteq~ \mathrm{PSPACE}$
 \end{itemize}
+\end{blueblock}~\\
+\begin{itemize}\itemsep1ex
+	\item Level 1:~ $\Sigma_1^p = \mathcal{NP}$,\quad $\Delta_1^p = \mathcal{P}$
+	\item Level 2:~ $\Sigma_2^p = \mathcal{NP}^{\mathcal{NP}}$,\quad \highlo{$\Delta_2^p = \mathcal{P}^{\mathcal{NP}}$}
+	\item \highlo{$\Delta_2^p$} $\longleftarrow$ deciding things is as easy as polynomially many calls to an $\mathcal{NP}$ oracle (\highlo{MaxSAT})
+\end{itemize}~\\[2em]
+Note that the slides leave out co-$\mathcal{NP}$ to simplify the depiction: $\Pi_0^p = \mathcal{P}$, $\Pi_1^p = \text{co-}\mathcal{NP}$, $\Pi_2^p = \text{co-}\mathcal{NP}^{\mathcal{NP}}$, \dots
 \end{frame}
 
-\begin{frame}{Practical MaxSAT Solving: Input Format, Solvers}
-\vspace{-2em}
+\begin{frame}{Practical MaxSAT Solving}{Input Format, Solvers}
 \begin{block}{Standard Solver Input Format: DIMACS WCNF}
-\begin{itemize}\itemsep1ex
+\begin{itemize}\itemsep1em
 	\item Like DIMACS CNF: Variables indexed from $1$ to $n$, Negation: $-i$ means $\lnot x_i$, Clauses terminated with $0$
-	\item Header line:
-	\begin{quote}
-	\texttt{p wcnf <\#vars> <\#clauses> <top>}
-	\end{quote}
+	\item Header line: \texttt{p wcnf <\#vars> <\#clauses> <top>}
 	\item Clause weight is first integer in line; if weight $\geq$ \texttt{top} $\rightarrow$ hard clause
 \end{itemize}
 \end{block}
 \begin{block}{Push-Button Solvers / Black-box Solvers}
-\begin{itemize}\itemsep1ex
+\begin{itemize}\itemsep1em
 	\item Input: in standard WCNF format
 	\item Output: provably optimal solution or \texttt{UNSATISFIABLE}
 	\item Internally rely on CDCL SAT solvers to prove unsatisfiability of subsets of clauses
-	\item Examples: Open-source MaxSAT Solvers
-	\begin{itemize}
-		\item OpenWBO --- \url{http://sat.inesc-id.pt/open-wbo/}
-		\item MaxHS --- \url{http://maxhs.org}
-		\item LMHS --- \url{http://www.cs.helsinki.fi/group/coreo/lmhs/}
-	\end{itemize}
+	\item Find recent MaxSAT solvers and benchmarks at \url{https://maxsat-evaluations.github.io/2026/}
 \end{itemize}
 \end{block}
 \end{frame}
 
 \begin{frame}{Recap.}
-\begin{block}{So far}
+\begin{block}{So far: MaxSAT}
 	\begin{itemize}\itemsep1em
-		\item MaxSAT is a powerful paradigm for Boolean optimization
-		\item Can be used to model and solve a wide range of real-world problems
-		\item Complexity: $\mathsf{FP}^{\mathcal{NP}}$-complete
+		\item Powerful paradigm for Boolean optimization
+		\item Wide range of real-world problems
+		\item Complexity: $\Delta_2^p$-complete
 		\item Standard input format: DIMACS WCNF
-		\item Push-button solvers are widely available and effective
+		\item Push-button solvers are available and effective
 	\end{itemize}
 \end{block}
 \begin{block}{Next up}
-	Algorithms for solving MaxSAT
+	Fundamental algorithms for solving MaxSAT
 \end{block}
 \end{frame}
 
 \begin{frame}{Algorithms for MaxSAT Solving}
+\begin{block}{Example Implementations / Historic Solvers}
 \begin{itemize}\itemsep1em
 	\item \textbf{Branch and Bound:} MaxSatz, ahmaxsat
 	\item \textbf{Direct Integer Programming:} IP Encoding + IP Solver (e.g., CPLEX, Gurobi)
-	\item \textbf{Iterative, Model-Based:} QMaxSAT
-	\item \textbf{Core-Based:} Eva, MSCG, OpenWBO, WPM, maxino
+	\item \textbf{Iterative, Linear SAT to UNSAT (LSU):} QMaxSAT
+	\item \textbf{Core-Guided:} Eva, MSCG, OpenWBO, WPM, maxino
 	\item \textbf{IP-SAT Hybrids:} MaxHS, LMHS
 \end{itemize}
+\end{block}
 \end{frame}
 
-\begin{frame}{Branch and Bound}
-\vspace{-2em}
+\begin{frame}{Branch and Bound}{Classic method for optimization over search trees}
 \begin{columns}[T]
 \begin{column}{0.69\textwidth}
-Classic method for optimization over search trees\\[1em]
 Effective on small, combinatorially hard problems (e.g., Max-Clique),\\
 but scalability issues with thousands of variables\\[1em]
 \begin{itemize}\itemsep1em
@@ -351,21 +331,19 @@ Basic technique:\\[1ex]
 \end{columns}
 \end{frame}
 
-\begin{frame}{Branch and Bound: Lower Bounds by Cores}
-\vspace{-1em}
+\begin{frame}{Branch and Bound}{Lower Bounds by UNSAT Cores}
 Look for inconsistencies that force some soft clause to be falsified.\\[1em]
 \begin{itemize}\itemsep1em
-	\item Strategy: find unsatisfiable sets of clauses (UNSAT cores)
-	\item Each core forces at least one clause to be falsified
-	\item Example:
+	\item Strategy: find UNSAT cores, i.e. unsatisfiable subsets of clauses\\
+	$\longrightarrow$ At least one clause in an UNSAT core has to be falsified
+	\item Example: $\kappa = \{(\{x\},2), (\{\lnot x\}, 3)\}$ is UNSAT core\\[1ex]
 	\begin{itemize}\itemsep1em
-		\item $\kappa = \{(x,2), (\lnot x, 3)\}$ is unsatisfiable; replace with $\kappa' = \{(\emptyset, 2), (\lnot x, 1)\}$
-		\item $\{(x,2), (\lnot x,3)\} \rightarrow \{(\emptyset,2), (\lnot x,1)\}$
-		\item Cost of $\emptyset$ increased by 2\\
-			$\Rightarrow$ 2 is a lower bound
+		\item replace it with $\kappa' = \{(\emptyset, 2), (\{\lnot x\}, 1)\}$
+		\item Cost of $\emptyset$ (=minimum cost) gets increased by 2\\
+			$\longrightarrow$ 2 is a lower bound
 		\item The cost of each truth assignment is preserved
 	\end{itemize}
-	\item Repeat:
+	\item Repeat:\\[1ex]
 	\begin{enumerate}\itemsep1ex
 		\item Detect unsatisfiable core $\kappa$
 		\item Apply sound transformation to increase $\text{cost}(\emptyset)$
@@ -374,14 +352,12 @@ Look for inconsistencies that force some soft clause to be falsified.\\[1em]
 \end{itemize}
 \end{frame}
 
-\begin{frame}{MaxSAT by Integer Programming (IP)}
-\vspace{-2em}
-Using IP solvers as MaxSAT engines.\\[1em]
-\begin{itemize}\itemsep1em
-	\item IP solvers widely used in Operations Research, e.g. IBM CPLEX, Gurobi, SCIP, etc.
+\begin{frame}{MaxSAT by Integer Programming (IP)}{Using IP solvers as MaxSAT engines}
+\begin{itemize}\itemsep1ex
+	\item IP solvers are widely used in Operations Research (IBM CPLEX, Gurobi, SCIP, etc.)
 	\item Solve problems with linear constraints and integer variables
 	\item Very effective on many standard optimization problems\\[1ex]
-	But do not dominate native MaxSAT solvers on ``very Boolean'' problems
+	Do not dominate native MaxSAT solvers on ``very Boolean'' problems
 \end{itemize}~\\
 \begin{block}{MaxSAT Encoding into IP}
 \begin{enumerate}
@@ -399,8 +375,7 @@ Using IP solvers as MaxSAT engines.\\[1em]
 \end{block}
 \end{frame}
 
-\begin{frame}{SAT-Based MaxSAT Solving}
-The most widely used modern approach.~\\[1ex]
+\begin{frame}{SAT-Based MaxSAT Solving}{The most widely used modern approach}
 \begin{itemize}\itemsep1ex
 	\item Solve a sequence of SAT instances that ask for different values of $k$:
 	\begin{quote}
@@ -408,7 +383,8 @@ The most widely used modern approach.~\\[1ex]
 	\end{quote}
 	\item SAT-based MaxSAT algorithms mainly do two things:\\[1ex]
 	\begin{enumerate}\itemsep1em
-	\item Develop better ways to encode this decision problem.
+	\item Develop better ways to encode this decision problem.Algorithms for solving MaxSAT
+\
 	\item Find ways to exploit information obtained from the SAT solver at each stage in the next stage.
 	\end{enumerate}
 \end{itemize}~\\
@@ -416,7 +392,7 @@ Assume unit-weight soft clauses for now \dots
 
 \begin{block}{Methods for SAT-Based MaxSAT}
 \begin{itemize}\itemsep1em
-  \item \textbf{Iterative Search:} Iteratively increase $k$ until SAT
+  \item \textbf{Iterative Search:} Iteratively increase (decrease) $k$ until SAT (UNSAT)
   \item \textbf{Core-Based Methods:} Use unsatisfiable cores to guide search
   \item \textbf{Hybrid Methods:} Combine SAT solving with integer programming
 \end{itemize}
@@ -424,29 +400,25 @@ Assume unit-weight soft clauses for now \dots
 \end{frame}
 
 \begin{frame}{Iterative Search}
-\begin{block}{Basic Approach}
-\begin{itemize}
-	\item To check whether F has a solution of cost $\leq k$, solve: $(C_1 \vee r_1) \wedge \cdots \wedge (C_n \vee r_n) \wedge \left(\sum_{i=1}^n r_i \leq k\right)$
-	\item Iterate over $k = 1, 2, \dots$ until optimal $k$ is found
-\end{itemize}
-\end{block}
+\vspace{-2em}
+To check whether F has a solution of cost $\leq k$, solve: $(C_1 \vee r_1) \wedge \cdots \wedge (C_n \vee r_n) \wedge \left(\sum_{i=1}^n r_i \leq k\right)$, and iterate over $k = 1, 2, \dots$ until optimal $k$ is found.\\[1ex]
 \begin{block}{Iterating over $k$}
-	\begin{itemize}
-		\item \textbf{Linear Search:} (not efficient)\\
+	\begin{itemize}\itemsep1ex
+		\item \textbf{Linear Search (UNSAT to SAT):} (not efficient)\\
 		Start at $k = 1$, increment until SAT
-		\item \textbf{Binary Search:} (effective with core-based reasoning)\\
-		\begin{itemize}
-			\item Initialize: $LB = 0$, $UB = \#$soft clauses
-			\item Check $k = \lfloor \frac{LB + UB}{2} \rfloor$
-			\item If SAT: $UB = k$, else $LB = k + 1$
-			\item Stop when $UB = LB + 1$, then UB is optimal.
-		\end{itemize}
 		\item \textbf{Linear Search (SAT to UNSAT):} (can be effective)\\
 		\begin{itemize}
 			\item Find model $\pi$ for hard clauses, let $k = \#$violated soft clauses$-1$
 			\item Try solving again with lower $k$ until UNSAT
 			\item If SAT: set $k$ to $\#$violated soft clauses and repeat
 			\item If UNSAT: last SAT solution is optimal
+		\end{itemize}
+		\item \textbf{Binary Search:} (can be effective with core-based reasoning)\\
+		\begin{itemize}
+			\item Initialize: $LB = 0$, $UB = \#$soft clauses
+			\item Check $k = \lfloor \frac{LB + UB}{2} \rfloor$
+			\item If SAT: $UB = k$, else $LB = k + 1$
+			\item Stop when $UB = LB + 1$, then UB is optimal.
 		\end{itemize}
 	\end{itemize}
 \end{block}
@@ -456,7 +428,7 @@ Assume unit-weight soft clauses for now \dots
 \vspace{-2em}
 \begin{block}{Motivation}
 Adding linear cardinality constraints over all soft clauses is too loose:
-\begin{itemize}
+\begin{itemize}\itemsep1ex
 	\item One relaxation variable $r_i$ per soft clause, could be well over 100k of variables
 	\item Linear cardinality constraints over all soft clauses are too loose:\\
 	no information about which relaxation variables to assign to 1
@@ -465,7 +437,7 @@ Adding linear cardinality constraints over all soft clauses is too loose:
 \end{block}
 \begin{block}{Unsatisfiable Cores in MaxSAT}
 Core-based approach gives more powerful constraint over which particular soft clauses to relax.
-\begin{itemize}
+\begin{itemize}\itemsep1ex
 	\item \textbf{UNSAT Core:} A subset $F'_s \subseteq F_s$ s.t. $F_h \wedge F'_s$ is UNSAT
 	\item At least one clause in each core must be falsified
 	\item Instead of iteratively ruling out non-optimal solutions, iteratively find and rule out UNSAT cores
@@ -474,7 +446,7 @@ Core-based approach gives more powerful constraint over which particular soft cl
 \end{block}
 \end{frame}
 
-\begin{frame}{Core-Guided MaxSAT Algorithms: Fu-Malik}
+\begin{frame}{Core-Guided MaxSAT Algorithms: Fu-Malik}{The Original}
 \begin{itemize}\itemsep1em
 	\item First core-guided MaxSAT algorithm [Fu \& Malik, 2006]
 	\item Iterative approach:
@@ -538,16 +510,12 @@ Differences to Fu-Malik:
 \begin{itemize}
 	\item Introduce only at most one relaxation variable to each soft clause\\
 	$\rightarrow$ Re-use already introduced relaxation variables
-	\item Instead of adding one AtMost-1/Exactly-1 constraint per iteration:\\
-	Update the AtMost-k, k noting the k-th iteration
 \end{itemize}
 \end{block}
-
 \begin{block}{OpenWBO Algorithm by Martins, Joshi, Manquinho, and Lynce, 2014}
 Combines MSU3 with incremental construction of the cardinality constraint:\\
 $\rightarrow$ Each new constraint builds on the encoding of the previous constraint
 \end{block}
-
 \begin{block}{WPM2 Algorithm by Ansótegui, Bonet, and Levy, 2013a}
 Proposes a method for dealing with overlapping cores: groups intersecting cores into disjoint covers.\\
 The cores might not be disjoint but the covers will be\\
@@ -613,19 +581,6 @@ For more on some of the details, see
 \end{itemize}~\\
 IHS Algorithms for MaxSAT are among the best performing solvers today, and work well on a wide range of problems, particularly on large instances with many different weights on soft clauses.
 \end{block}
-\end{frame}
-
-\begin{frame}{Recap.}{Today's Lecture}
-\begin{itemize}\itemsep1em
-	\item MaxSAT is a powerful paradigm for Boolean optimization
-	\item Can be used to model and solve a wide range of real-world problems
-	\item Complexity: $\mathsf{FP}^{\mathcal{NP}}$
-	\item Standard input format: DIMACS WCNF
-	\item Push-button solvers are widely available and effective
-	\item Several algorithmic approaches to MaxSAT solving
-	\item Core-guided MaxSAT solving is a powerful approach
-	\item Implicit Hitting Set algorithms are among the best performing MaxSAT solvers
-\end{itemize}
 \end{frame}
 
 \end{document}
