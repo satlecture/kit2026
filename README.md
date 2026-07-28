@@ -28,7 +28,7 @@ See also [the page from last year](https://github.com/satlecture/kit2025).
 * **Monday, June 29** and **Monday, July 6**: [L10 - Parallel SAT Solving](slides/l10-parallel.pdf) _[DS]_
 * **Monday, July 13**: [L11 - Proof Pragmatics and Parallel Proof Tech](slides/l11-proof-pragmatics-parallel.pdf) _[DS]_
 * **Monday, July 20**: **(remote lecture - contact us for link)** [L12 - Satisfiability Modulo Theories](slides/l12-smt.pdf) _[DS]_
-* **Monday, July 27**: [L12 - Maximum Satisfiability (MaxSAT)](slides/l13-maxsat.pdf) _[AI]_
+* **Monday, July 27**: [L13 - Maximum Satisfiability (MaxSAT)](slides/l13-maxsat.pdf) _[AI]_
 
 ## Exercises
 
