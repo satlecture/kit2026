@@ -106,7 +106,7 @@
 	\vspace*{-2mm}
 	\begin{blueblock}{The RUP Property}
 		Given a clause set $C$ and a clause $c$, we say that $c$ has the \highl{Reverse Unit Propagation} (RUP) property iff\\
-		unit propagation on $\{ C \} \cup \{\overline{c}\}$, where $\overline{c} := \{ \{ \neg l \} :\ l \in c \}$, produces the \highlo{empty clause}.
+		unit propagation on $\{ C \} \cup \overline{c}$, where $\overline{c} := \{ \{ \neg l \} :\ l \in c \}$, produces the \highlo{empty clause}.
 	\end{blueblock}
 	\begin{itemize}\setlength{\itemsep}{3mm}
 		\item Is a clause $c$ with RUP property w.r.t.\ a checker's clause set $B$ a \highl{sound addition} to $B$?\\
